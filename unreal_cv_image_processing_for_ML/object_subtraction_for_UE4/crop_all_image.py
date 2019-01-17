@@ -32,5 +32,6 @@ for a,b,image_mask in os.walk(path_mask):
                     image_rgb_rec=cv2.rectangle(image_rgb2,(x,y),(x+w,y+h),(255,255,255),1)
                     crop_img = image_rgb_rec[y:y+h, x:x+w]
                     cv2.imwrite("/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_RGB/"+str(t),crop_img)
+					#cv2.imwrite("F:/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_RGB/a/"+str(t),crop_img)
                 else:
                     pass
