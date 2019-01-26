@@ -30,7 +30,7 @@ azimuthal_angle_end = int(input('Enter azimuthal_angle_end value:'))
 
 pic_num=1
 
-for polar_angle in range(polar_angle_start,polar_angle_end,-10):
+for polar_angle in range(polar_angle_start,polar_angle_end,-30):
     
     #calculating the pitch value for different polar angle
     pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
@@ -42,7 +42,7 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-10):
         centre_x=-45    #centre of the object with respect to x-axis
         centre_y=0      #centre of the object with respect to y-axis
         centre_z=32     #centre of the object with respect to z-axis
-        radius=300      #randomly choosen a distance betwen object and camera
+        radius=350      #randomly choosen a distance betwen object and camera
                         #from where the object is clearly visible
         
         #Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
@@ -55,7 +55,7 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-10):
         yaw+=1 # yaw value is increasing to look at the object
         
         #Comment out the following line to save image
-        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/RGB_image_table/'+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/rgb_table/'+str(pic_num)+'.png')
         pic_num+=1
     print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
