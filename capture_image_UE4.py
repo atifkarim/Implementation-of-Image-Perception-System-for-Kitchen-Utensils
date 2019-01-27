@@ -55,7 +55,7 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-30):
         yaw+=1 # yaw value is increasing to look at the object
         
         #Comment out the following line to save image
-        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/rgb_table/'+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
         pic_num+=1
     print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
