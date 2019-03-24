@@ -11,7 +11,20 @@ import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%
 import sys, time
 import math
 
+def onEnterDir(dropdown, dropdownVar):
+    path = filedialog.askdirectory()
+    if not path:
+        return
+    filenames = os.listdir(path)
+    dropdown.configure(state='normal')  # Enable drop down
+    menu = dropdown['menu']
 
+    # Clear the menu.
+    menu.delete(0, 'end')
+    for name in filenames:
+        # Add menu items.
+        menu.add_command(label=name, command=lambda: var.set(name))
+    return path
 
 # Establish connection with the UE4 game
 
@@ -32,6 +45,16 @@ import math
 root= Tk()
 root.geometry('500x500+0+0')
 label_name=Label(root,font=('arial',12,'bold'),bd=5 , text="UE4 image capture GUI").grid(row=0, column=5)
+
+dropdownVar = StringVar()
+dropdown = OptionMenu(root, dropdownVar, "Select SED...")
+dropdown.grid(row=10, column=5)
+dropdown.configure(state="disabled")
+b = Button(root, text='Change directory',
+           command=lambda: onEnterDir(dropdown, dropdownVar))
+b.grid(row=10, column=7)
+#func_1=onEnterDir(dropdown, dropdownVar)
+#print(func_1)
 
 #label_name=Label(root,font=('arial',12,'bold'),bd=5 , text="connection status").grid(row=1, column=1)
 #label_name=Label(root,font=('arial',12,'bold'),bd=5 , text=" ").grid(row=1, column=3)
