@@ -25,6 +25,8 @@ print("address is : ",address)
 
 camera_view=parser.get('capture_image', 'camera_view')
 
+image_type=parser.get('capture_image', 'image_type')
+
 from unrealcv import client
 client.connect()
 if not client.isconnected():
@@ -80,7 +82,7 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-10):
 # =============================================================================
 #     	  res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
 #         res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
-        res = client.request('vget /camera/0/'+str(camera_view)+str(" ")+str(address)+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/'+str(camera_view)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
 #        print("type of res: ",type(res))
 #        print("address is now : ",address)
         print("camera_view: ",res)
