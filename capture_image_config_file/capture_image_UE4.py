@@ -23,6 +23,7 @@ azimuthal_angle_end=int(azimuthal_angle_end)
 address=parser.get('capture_image', 'address')
 print("address is : ",address)
 
+camera_view=parser.get('capture_image', 'camera_view')
 
 from unrealcv import client
 client.connect()
@@ -79,9 +80,10 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-10):
 # =============================================================================
 #     	  res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
 #         res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
-        res = client.request('vget /camera/0/lit '+str(address)+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/'+str(camera_view)+str(" ")+str(address)+str(pic_num)+'.png')
 #        print("type of res: ",type(res))
 #        print("address is now : ",address)
+        print("camera_view: ",res)
 # =============================================================================
         pic_num+=1
 print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
