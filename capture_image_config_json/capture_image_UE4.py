@@ -1,18 +1,6 @@
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
-
-import json
-
-with open('config_file_capture_image.json', 'r') as f:
-    config = json.load(f)
-	
-polar_angle_start= config['DEFAULT']['polar_angle_start']
-polar_angle_end = config['DEFAULT']['polar_angle_end']
-azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
-azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
-
 # Establish connection with the UE4 game
-
 from unrealcv import client
 client.connect()
 if not client.isconnected():
@@ -24,6 +12,21 @@ if not client.isconnected():
 res = client.request('vget /unrealcv/status')
 # The image resolution and port is configured in the config file.
 print(res)
+
+import json
+
+with open('config_file_capture_image.json', 'r') as f:
+    config = json.load(f)
+	
+polar_angle_start= config['DEFAULT']['polar_angle_start']
+polar_angle_end = config['DEFAULT']['polar_angle_end']
+azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
+azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
+camera_view_type= config['DEFAULT']['camera_view_type']
+address= config['DEFAULT']['address']
+image_type= config['DEFAULT']['image_type']
+print("type is:",type(address))
+
 
 # Observing spherical movement of the camera around the object
 
@@ -42,7 +45,7 @@ import math
 
 pic_num=1
 
-for polar_angle in range(polar_angle_start,polar_angle_end,-30):
+for polar_angle in range(polar_angle_start,polar_angle_end,-10):
     
     #calculating the pitch value for different polar angle
     pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
@@ -67,8 +70,10 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-30):
         yaw+=1 # yaw value is increasing to look at the object
         
         #Comment out the following line to save image
-		#res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
+#        res = client.request('vget /camera/0/camera_view_type address'+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
         #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
+#        print(res)
         pic_num+=1
     print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
