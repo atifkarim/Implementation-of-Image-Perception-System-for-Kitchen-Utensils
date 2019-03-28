@@ -1,6 +1,16 @@
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
 
+import json
+
+with open('config_file_capture_image.json', 'r') as f:
+    config = json.load(f)
+	
+polar_angle_start= config['DEFAULT']['polar_angle_start']
+polar_angle_end = config['DEFAULT']['polar_angle_end']
+azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
+azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
+
 # Establish connection with the UE4 game
 
 from unrealcv import client
@@ -19,11 +29,13 @@ print(res)
 
 import math
 
-polar_angle_start = int(input('Enter polar_angle_start value:'))
-polar_angle_end = int(input('Enter polar_angle_end value:'))
-
-azimuthal_angle_start = int(input('Enter azimuthal_angle_start value:'))
-azimuthal_angle_end = int(input('Enter azimuthal_angle_end value:'))
+# =============================================================================
+# polar_angle_start = int(input('Enter polar_angle_start value:'))
+# polar_angle_end = int(input('Enter polar_angle_end value:'))
+# 
+# azimuthal_angle_start = int(input('Enter azimuthal_angle_start value:'))
+# azimuthal_angle_end = int(input('Enter azimuthal_angle_end value:'))
+# =============================================================================
 
 # the area cover with polar_angle/elevation angle is 'Latitude' region. From north to South or vice versa
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
