@@ -1,3 +1,5 @@
+# Code for giving input from terminal and saving image. Here user have to change viewmode also.
+
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
 
@@ -55,7 +57,8 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-30):
         yaw+=1 # yaw value is increasing to look at the object
         
         #Comment out the following line to save image
-        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
+		#res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
+        #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
         pic_num+=1
     print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
