@@ -14,11 +14,35 @@ res = client.request('vget /unrealcv/status')
 print(res)
 
 import json
+import numpy as np
 
 with open('config_file_capture_image.json', 'r') as f:
     config = json.load(f)
-	
+
+actor_name= config['DEFAULT']['actor_name']
+#string actor_name =  actor_name.split(',')
+print("actor name type: ",type(actor_name))
+print("actors are: ",actor_name)
+#x_actor=[]
+#print(actor_name.split(","))
+x_actor = actor_name.split(",")
+print("x_actor type after splitting: ",type(x_actor),"\nx_actor after splitting: ",x_actor)
+x_actor_array=np.array(x_actor)
+print("x_actor_array type: ",type(x_actor_array))
+#print("x_actor_array: ",x_actor_array[1])
+
+for i in x_actor_array:
+    print(i)
+my_actor=str(x_actor_array[0])
+print('my_actor type: ',type(my_actor))
+
+actor_location=client.request('vget /object/'+str(my_actor)+'/location')
+print('actor_location: ',actor_location)
+print('actor_loaction_type: ',type(actor_location))
+
+
 polar_angle_start= config['DEFAULT']['polar_angle_start']
+#print("polar angle start type: ",type(polar_angle_start))
 polar_angle_end = config['DEFAULT']['polar_angle_end']
 azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
 azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
@@ -71,7 +95,7 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-10):
         
         #Comment out the following line to save image
 #        res = client.request('vget /camera/0/camera_view_type address'+str(pic_num)+'.png')
-        res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
+#        res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
         #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
 #        print(res)
         pic_num+=1
