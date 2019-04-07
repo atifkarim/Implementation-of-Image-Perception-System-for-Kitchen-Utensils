@@ -39,6 +39,10 @@ print('my_actor type: ',type(my_actor))
 actor_location=client.request('vget /object/'+str(my_actor)+'/location')
 print('actor_location: ',actor_location)
 print('actor_loaction_type: ',type(actor_location))
+actor_location = actor_location.split(" ")
+actor_location=np.array(actor_location)
+for j in actor_location:
+    print("hi: ",j)
 
 
 polar_angle_start= config['DEFAULT']['polar_angle_start']
