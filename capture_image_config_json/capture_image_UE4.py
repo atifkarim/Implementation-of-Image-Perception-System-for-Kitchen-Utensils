@@ -25,15 +25,15 @@ print("actor name type: ",type(actor_name))
 print("actors are: ",actor_name)
 #x_actor=[]
 #print(actor_name.split(","))
-x_actor = actor_name.split(",")
-print("x_actor type after splitting: ",type(x_actor),"\nx_actor after splitting: ",x_actor)
-x_actor_array=np.array(x_actor)
-print("x_actor_array type: ",type(x_actor_array))
+my_actor = actor_name.split(",")
+print("my_actor type after splitting: ",type(my_actor),"\nmy_actor after splitting: ",my_actor)
+my_actor_array=np.array(my_actor)
+print("my_actor_array type: ",type(my_actor_array))
 #print("x_actor_array: ",x_actor_array[1])
 
-for i in x_actor_array:
+for i in my_actor_array:
     print(i)
-my_actor=str(x_actor_array[0])
+my_actor=str(my_actor_array[0])
 print('my_actor type: ',type(my_actor))
 
 actor_location=client.request('vget /object/'+str(my_actor)+'/location')
@@ -73,36 +73,45 @@ import math
 
 pic_num=1
 
-for polar_angle in range(polar_angle_start,polar_angle_end,-10):
+for i in my_actor_array:
+    actor_location=client.request('vget /object/'+str(i)+'/location')
+    print("here location: ",actor_location)
+    actor_location = actor_location.split(" ")
+    actor_location_array=np.array(actor_location)
+    actor_location_array = actor_location_array.astype(np.float)
+    for j in actor_location_array:
+        print("loc now: ",type(j))
+
+    for polar_angle in range(polar_angle_start,polar_angle_end,-10):
     
     #calculating the pitch value for different polar angle
-    pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
+        pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
     
-    yaw=180 #rotaion around the z-axis(you can denote by 'beta')
-    roll=0 #rotaion around x-axis(you can denote by 'gamma')
-    for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,1):
+        yaw=180 #rotaion around the z-axis(you can denote by 'beta')
+        roll=0 #rotaion around x-axis(you can denote by 'gamma')
+        for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,1):
         
-        centre_x=-45    #centre of the object with respect to x-axis
-        centre_y=0      #centre of the object with respect to y-axis
-        centre_z=32     #centre of the object with respect to z-axis
-        radius=350      #randomly choosen a distance betwen object and camera
-                        #from where the object is clearly visible
+            centre_x=actor_location_array[0]    #centre of the object with respect to x-axis
+            centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
+            centre_z=actor_location_array[2]     #centre of the object with respect to z-axis
+            radius=350      #randomly choosen a distance betwen object and camera
+                            #from where the object is clearly visible
         
-        #Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
-        x= radius*(math.cos(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_x
-        y= radius*(math.sin(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_y
-        z= radius*(math.cos(math.radians(polar_angle)))+centre_z+15
+            #Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
+            x= radius*(math.cos(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_x
+            y= radius*(math.sin(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_y
+            z= radius*(math.cos(math.radians(polar_angle)))+centre_z+15
         
-        res_rotation=client.request('vset /camera/0/rotation '+str(pitch)+' '+str(yaw)+' '+str(roll)+'')
-        res_location=client.request('vset /camera/0/location '+str(x)+' '+str(y)+' '+str(z)+'')
-        yaw+=1 # yaw value is increasing to look at the object
+            res_rotation=client.request('vset /camera/0/rotation '+str(pitch)+' '+str(yaw)+' '+str(roll)+'')
+            res_location=client.request('vset /camera/0/location '+str(x)+' '+str(y)+' '+str(z)+'')
+            yaw+=1 # yaw value is increasing to look at the object
         
-        #Comment out the following line to save image
-#        res = client.request('vget /camera/0/camera_view_type address'+str(pic_num)+'.png')
-#        res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
-        #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
-#        print(res)
-        pic_num+=1
-    print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
+            #Comment out the following line to save image
+            #        res = client.request('vget /camera/0/camera_view_type address'+str(pic_num)+'.png')
+            #        res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
+            #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
+            #        print(res)
+            pic_num+=1
+        print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
         

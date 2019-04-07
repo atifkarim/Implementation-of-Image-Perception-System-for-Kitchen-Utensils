@@ -1,8 +1,8 @@
 {
   "DEFAULT": {
-    "actor_name":"chair_15",
+    "actor_name":"chair_15,SM_TableRound_2",
     "polar_angle_start": 90,
-	"polar_angle_end": 80,
+	"polar_angle_end": 0,
 	"azimuthal_angle_start":0,
 	"azimuthal_angle_end":4,
 	"camera_view_type":"lit",
