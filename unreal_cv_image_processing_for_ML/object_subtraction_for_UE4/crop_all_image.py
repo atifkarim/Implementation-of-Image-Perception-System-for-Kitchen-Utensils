@@ -3,8 +3,12 @@ import cv2
 import numpy as np
 import os
 
-path_mask = '/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/mask_image'
-path_rgb = '/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/RGB_image'
+#path_mask = '/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/mask_image'
+#path_rgb = '/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/RGB_image'
+
+path_mask = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/mask_calgonit'
+path_rgb = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/mask_calgonit'
+
 
 # img_path_mask = sorted(glob.glob(path_mask+ '/*.png'))
 # img_path_rgb = sorted(glob.glob(path_rgb+ '/*.png'))
@@ -31,7 +35,8 @@ for a,b,image_mask in os.walk(path_mask):
                     image_rgb2=cv2.imread(rgb)
                     image_rgb_rec=cv2.rectangle(image_rgb2,(x,y),(x+w,y+h),(255,255,255),1)
                     crop_img = image_rgb_rec[y:y+h, x:x+w]
-                    cv2.imwrite("/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_RGB/"+str(t),crop_img)
+#                    cv2.imwrite("/media/atif/0820209220208930/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_RGB/"+str(t),crop_img)
+                    cv2.imwrite("F:/unreal_cv_documentation/ignore_from_git/YOLO_learning/BBox-Label-Tool/Images/cropped_image/jpg/test/"+str(t),crop_img)
 					#cv2.imwrite("F:/unreal_cv_documentation/unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_RGB/a/"+str(t),crop_img)
                 else:
                     pass
