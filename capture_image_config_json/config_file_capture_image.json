@@ -4,7 +4,7 @@
     "polar_angle_start": 90,
 	"polar_angle_end": 65,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":2,
+	"azimuthal_angle_end":5,
 	"radius":350,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
@@ -16,8 +16,7 @@
   
   
   "SOMAT": {
-    "actor_name":"SM_SomatClassic_2",
-    "radius_somat":250
+    "radius_somat":150
 	
   }
 }

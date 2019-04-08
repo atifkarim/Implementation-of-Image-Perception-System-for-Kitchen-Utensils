@@ -63,6 +63,7 @@ image_type= config['DEFAULT']['image_type']
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in my_actor_array:
+    print('i is: ',i)
     pic_num=1
     
 #    creating directory to save present actor's captured image. here at firts create the folder written inside the inverted comma
@@ -98,10 +99,15 @@ for i in my_actor_array:
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
             radius=radius
+            
+            if i == 'SM_SomatClassic_2':
+                radius=radius_somat
+                
 #            radius=250.000                        #randomly choosen a distance betwen object and camera
                                                     #from where the object is clearly visible
         
 #            Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
+            print('radius is: ',radius)
             x= radius*(math.cos(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_x
             y= radius*(math.sin(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_y
             z= radius*(math.cos(math.radians(polar_angle)))+centre_z+15
@@ -112,7 +118,6 @@ for i in my_actor_array:
             yaw+=1 # yaw value is increasing to look at the object
             
 #            saving the image in the desired/created folder
-            print("hi coder: azim>> ",azimuthal_angle," and polar>>> ",polar_angle,"\n")
             res = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)+'')
             res = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)+'')
             res = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)+'')
