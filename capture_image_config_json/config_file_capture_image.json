@@ -1,11 +1,9 @@
 {
   "DEFAULT": {
-    "actor_name":"chair_15,SM_TableRound_2,SM_SomatClassic_2",
     "polar_angle_start": 90,
-	"polar_angle_end": 65,
+	"polar_angle_end": 80,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":5,
-	"radius":350,
+	"azimuthal_angle_end":2,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
 	"viewmode_3":"normal",
@@ -14,9 +12,23 @@
 	
   },
   
-  
-  "SOMAT": {
-    "radius_somat":150
+  "actor":{
+  "actor_1": {
+  "actor_name":"chair_15",
+    "radius":350
 	
-  }
+  },
+  
+  "actor_2": {
+  "actor_name":"SM_TableRound_2",
+    "radius":250
+	
+  },
+  
+  
+  "actor_3": {
+  "actor_name":"SM_SomatClassic_2",
+    "radius":150
+	
+  }}
 }

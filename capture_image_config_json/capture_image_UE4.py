@@ -21,32 +21,30 @@ import math
 #config file is opening and fetching data
 with open('config_file_capture_image.json', 'r') as f:
     config = json.load(f)
-# getting the actor name and modify them to be used in python code
-actor_name= config['DEFAULT']['actor_name']
-#print("actor name type: ",type(actor_name))
-#print("actors are: ",actor_name)
-my_actor = actor_name.split(",") #careful !!! don't give any space after comma as there is no comma while you will print actor_name
-                                 #if there is space after one actor name and then comma appears then give a space after the comma in the code
-#print("my_actor type after splitting: ",type(my_actor),"\nmy_actor after splitting: ",my_actor)
-my_actor_array=np.array(my_actor)
-#print("my_actor_array type: ",type(my_actor_array))
-#print("x_actor_array: ",x_actor_array[1])
 
 polar_angle_start= config['DEFAULT']['polar_angle_start']
-#print("polar angle start type: ",type(polar_angle_start))
 polar_angle_end = config['DEFAULT']['polar_angle_end']
 azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
 azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
-radius=config['DEFAULT']['radius']
-radius_somat=config['SOMAT']['radius_somat']
 
 viewmode_1= config['DEFAULT']['viewmode_1']
 viewmode_2= config['DEFAULT']['viewmode_2']
 viewmode_3= config['DEFAULT']['viewmode_3']
-
 #address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
 #print("type is:",type(address))
+
+actor_dict={}
+for i in config['actor']:
+    actor_dict[config['actor'][i]['actor_name']]=[]
+    actor_dict[config['actor'][i]['actor_name']].append(polar_angle_start)
+    actor_dict[config['actor'][i]['actor_name']].append(polar_angle_end)
+    actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_start)
+    actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_end)
+    actor_dict[config['actor'][i]['actor_name']].append(config['actor'][i]['radius'])
+
+
+
 
 
 # Observing spherical movement of the camera around the object
@@ -62,7 +60,7 @@ image_type= config['DEFAULT']['image_type']
 # the area cover with polar_angle/elevation angle is 'Latitude' region. From north to South or vice versa
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
-for i in my_actor_array:
+for i in actor_dict:
     print('i is: ',i)
     pic_num=1
     
@@ -80,7 +78,7 @@ for i in my_actor_array:
         
 #    getting the present actor's location
     actor_location=client.request('vget /object/'+str(i)+'/location')
-    print("here location: ",actor_location)
+#    print("here location: ",actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
     actor_location_array=np.array(actor_location)
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
@@ -98,16 +96,16 @@ for i in my_actor_array:
             centre_x=actor_location_array[0]      #centre of the object with respect to x-axis
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
-            radius=radius
+            radius= actor_dict[i][-1]
             
-            if i == 'SM_SomatClassic_2':
-                radius=radius_somat
+#            if i == 'SM_SomatClassic_2':
+#                radius=radius_somat
                 
 #            radius=250.000                        #randomly choosen a distance betwen object and camera
                                                     #from where the object is clearly visible
         
 #            Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
-            print('radius is: ',radius)
+#            print('radius is: ',radius)
             x= radius*(math.cos(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_x
             y= radius*(math.sin(math.radians(azimuthal_angle)))*(math.sin(math.radians(polar_angle)))+centre_y
             z= radius*(math.cos(math.radians(polar_angle)))+centre_z+15
