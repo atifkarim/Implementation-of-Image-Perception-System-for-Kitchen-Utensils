@@ -37,7 +37,13 @@ polar_angle_start= config['DEFAULT']['polar_angle_start']
 polar_angle_end = config['DEFAULT']['polar_angle_end']
 azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
 azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
-camera_view_type= config['DEFAULT']['camera_view_type']
+radius=config['DEFAULT']['radius']
+radius_somat=config['SOMAT']['radius_somat']
+
+viewmode_1= config['DEFAULT']['viewmode_1']
+viewmode_2= config['DEFAULT']['viewmode_2']
+viewmode_3= config['DEFAULT']['viewmode_3']
+
 #address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
 #print("type is:",type(address))
@@ -79,7 +85,7 @@ for i in my_actor_array:
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
-    for polar_angle in range(polar_angle_start,polar_angle_end,-40):
+    for polar_angle in range(polar_angle_start,polar_angle_end,-10):
     
 #        calculating the pitch value for different polar angle
         pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
@@ -91,7 +97,8 @@ for i in my_actor_array:
             centre_x=actor_location_array[0]      #centre of the object with respect to x-axis
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
-            radius=250.000                        #randomly choosen a distance betwen object and camera
+            radius=radius
+#            radius=250.000                        #randomly choosen a distance betwen object and camera
                                                     #from where the object is clearly visible
         
 #            Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
@@ -105,7 +112,11 @@ for i in my_actor_array:
             yaw+=1 # yaw value is increasing to look at the object
             
 #            saving the image in the desired/created folder
-            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
+            print("hi coder: azim>> ",azimuthal_angle," and polar>>> ",polar_angle,"\n")
+            res = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)+'')
+            res = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)+'')
+            res = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)+'')
+#            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
@@ -116,8 +127,8 @@ for i in my_actor_array:
 #             res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
 # =============================================================================
             
-            print("here dirName res is: ",res)
+#            print("here dirName res is: ",res)
             pic_num+=1
-        print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
+#        print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
         
