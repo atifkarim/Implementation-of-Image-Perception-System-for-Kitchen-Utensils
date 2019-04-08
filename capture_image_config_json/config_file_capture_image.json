@@ -9,5 +9,12 @@
 	"address":"F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/config_json/",
 	"image_type":"png"
 	
+  },
+  
+  
+  "SOMAT": {
+    "actor_name":"SM_SomatClassic_2",
+    "radius_somat":250
+	
   }
 }
