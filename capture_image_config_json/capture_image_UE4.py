@@ -45,58 +45,83 @@ for i in config['actor']:
     actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_end)
     actor_dict[config['actor'][i]['actor_name']].append(config['actor'][i]['radius'])
 
+global crop_1
+global index_lit
+global index_mask
 
+crop_1=0
+index_lit=0
+index_mask=2
 #cropping image function
 
 #path_mask = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/mask_calgonit'
 #path_rgb = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_calgonit'
 
 
-def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask):
+def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask,naming_rule):
+    index_s=0
+    index_t=1
+#    print("!!!!!!!!!FUNCTION CALL")
+    
 #    print('path_mask: ',path_mask,'\npath_rgb: ',path_rgb,'\ndirname: ',dirname)
     for a,b,image_mask in os.walk(path_mask):
-        print('\na: ',a,'\nb: ',b,'\nimage_mask: ',image_mask,'\nimage_mask_target: ',image_mask[mask])
-#        for s in image_mask:
+#        print('\na: ',a,'\nb: ',b,'\nimage_mask: ',image_mask)
+        for s in image_mask:
+            print("started new cropping")
 #            print('\ns: ',s)
-        n=image_mask[2].split("_")
-#        print('\nn is: ',n)
-        mask = path_mask+image_mask[mask]
-#        print('\nmask is: ',mask)
-#        print('\nimage_mask: ',image_mask[mask])
-        image_mask2=cv2.imread(mask)
-        
-        hsv = cv2.cvtColor(image_mask2, cv2.COLOR_BGR2HSV)
-        hsv_channels = cv2.split(hsv)
-    
-        _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-        im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(image_mask2, contours, 0, (0,255,0), 3)
-        cnt = contours[0]
-        x,y,w,h = cv2.boundingRect(cnt)
-        
-        for c,d,image_rgb in os.walk(path_rgb):
-            print('\nc: ',c,'\nd: ',d,'\nimage_rgb: ',image_rgb,'\nimage_rgb_target: ',image_rgb[lit])
-#        for t in image_rgb:
-            m=image_rgb[0].split('_')
-#            print('\nval of m: ',m)
-            if str(n[0])== str(m[0]):
-#                print('OK')
-                rgb = path_rgb+image_rgb[lit]
-#                print('OK_1')
-                image_rgb2=cv2.imread(rgb)
-                image_rgb_rec=cv2.rectangle(image_rgb2,(x,y),(x+w,y+h),(255,255,255),1)
-                crop_img = image_rgb_rec[y:y+h, x:x+w]
-                cropped='cropped'
-#                cv2.imwrite("F:/unreal_cv_documentation/ignore_from_git/YOLO_learning/BBox-Label-Tool/Images/cropped_image/jpg/test/"+str(t),crop_img)
-                cv2.imwrite(dirname+str(cropped)+str(n[0])+str(crop_1)+'.'+str(image_type),crop_img)
-                print('\nNOW image_rgb: ',image_rgb)
-#                crop_1=crop_1+1
-#                F:/unreal_cv_documentation/my_crop/
-            else:
-                pass
-#        return 
-
-#crop_1=0
+            n=s.split("_")
+#            print('\nn is: ',n)
+#            print('\nn5 is: ',n[5])
+            mask = path_mask+image_mask[index_s]
+            print('\nmask is: ',mask)
+#            print('\nimage_mask: ',image_mask[mask])
+            image_mask2=cv2.imread(mask)
+            
+            hsv = cv2.cvtColor(image_mask2, cv2.COLOR_BGR2HSV)
+            hsv_channels = cv2.split(hsv)
+            
+            _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+            im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(image_mask2, contours, 0, (0,255,0), 3)
+            cnt = contours[0]
+            x,y,w,h = cv2.boundingRect(cnt)
+            print("till here OK_1")
+            
+            for c,d,image_rgb in os.walk(path_rgb):
+#                print('\nc: ',c,'\nd: ',d,'\nimage_rgb: ',image_rgb)
+                for t in image_rgb:
+#                    print("t is: ",t)
+                    m=t.split('_')
+#                    print('\nval of m: ',m)
+                    if int(n[0])== int(m[0]) and str(n[5])!= str(m[5]):
+                        print("OK!!!")
+                        rgb = path_rgb+image_rgb[index_t]
+                        print("\nrgb: ",rgb)
+                        #                print('OK_1')
+                        image_rgb2=cv2.imread(rgb)
+                        image_rgb_rec=cv2.rectangle(image_rgb2,(x,y),(x+w,y+h),(255,255,255),1)
+                        crop_img = image_rgb_rec[y:y+h, x:x+w]
+#                        print("crop_image: ",crop_img)
+                        cropped='cropped'
+                        img_type='.png'
+                        #                cv2.imwrite("F:/unreal_cv_documentation/ignore_from_git/YOLO_learning/BBox-Label-Tool/Images/cropped_image/jpg/test/"+str(t),crop_img)
+                        cv2.imwrite("F:/unreal_cv_documentation/my_crop/"+str(n[0])+"_"+str(naming_rule)+str(cropped)+str(img_type),crop_img)
+                        print("CROP done")
+                        index_t=index_t+2
+                        index_s=index_s+2
+                        print("ok",len(image_mask))
+                        print("\nin_s: ",index_s,"in_t: ",index_t)
+                        if index_t>len(image_mask):
+                            break
+                        #                print('\nNOW image_rgb: ',image_rgb)
+                        #                crop_1=crop_1+1
+                        #                print("hi !!!!!!!!!!!!!!: ",crop_1)
+                        
+                        #                crop_1=crop_1+1
+                        #                F:/unreal_cv_documentation/my_crop/
+                    else:
+                        pass
+                        #        return 
 
 # Observing spherical movement of the camera around the object
 
@@ -112,10 +137,11 @@ def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask):
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
-    crop_1=0
-    index_lit=0
-    index_mask=2
+#    crop_1=0
+#    index_lit=0
+#    index_mask=2
 #    print('i is: ',i)
+    print("\njourney_start")
     pic_num=1
     
 #    creating directory to save present actor's captured image. here at firts create the folder written inside the inverted comma
@@ -139,7 +165,7 @@ for i in actor_dict:
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
-    for polar_angle in range(polar_angle_start,polar_angle_end,-10):
+    for polar_angle in range(polar_angle_start,polar_angle_end,-50):
     
 #        calculating the pitch value for different polar angle
         pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
@@ -147,7 +173,7 @@ for i in actor_dict:
         yaw=180 #rotaion around the z-axis(you can denote by 'beta')
         roll=0 #rotaion around x-axis(you can denote by 'gamma')
         for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,1):
-            print('I AM HERE!!!')
+#            print('I AM HERE!!!')
             centre_x=actor_location_array[0]      #centre of the object with respect to x-axis
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
@@ -173,19 +199,20 @@ for i in actor_dict:
 #            saving the image in the desired/created folder
 #            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
 #            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
+            path_lit=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)
+            path_mask=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)
+            path_normal=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)
+            name_crop=str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)
             
-            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)+'')
-            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)+'')
-            res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)+'')
+            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(path_lit)+'')
+            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(path_mask)+'')
+#            res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(path_normal)+'')
 
-            print('\ncrop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
+#            print('\ncrop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
+#            cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,image_number=crop_1,lit=index_lit,mask=index_mask)
             
-            cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,image_number=crop_1,lit=index_lit,mask=index_mask)
-            crop_1=crop_1+1
-            index_lit=index_lit+3
-            index_mask=index_mask+3
-            print('\nJETZT crop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
-            print('I AM GOING')
+#            print('\nJETZT crop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
+#            print('I AM GOING')
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
             
 #             if you want to use address info from config file then please use the following line
@@ -199,5 +226,15 @@ for i in actor_dict:
             
 #            print("here dirName res is: ",res)
             pic_num+=1
+    print("here dir is: ",dirName,"\npolar angle: ",polar_angle)
+    cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,image_number=crop_1,lit=index_lit,mask=index_mask,naming_rule=name_crop)
+    print("\n",i," :this_actor_cropping_finish")
+#    crop_1=crop_1+1
+#    index_lit=index_lit+3
+#    index_mask=index_mask+3
 #        print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
+        
+        
+        
+#print(dirName)
         
