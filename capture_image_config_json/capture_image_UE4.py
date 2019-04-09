@@ -55,7 +55,7 @@ for i in config['actor']:
 def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask):
 #    print('path_mask: ',path_mask,'\npath_rgb: ',path_rgb,'\ndirname: ',dirname)
     for a,b,image_mask in os.walk(path_mask):
-        print('\na: ',a,'\tb: ',b,'\timage_mask: ',image_mask)
+        print('\na: ',a,'\nb: ',b,'\nimage_mask: ',image_mask,'\nimage_mask_target: ',image_mask[mask])
 #        for s in image_mask:
 #            print('\ns: ',s)
         n=image_mask[2].split("_")
@@ -75,7 +75,7 @@ def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask):
         x,y,w,h = cv2.boundingRect(cnt)
         
         for c,d,image_rgb in os.walk(path_rgb):
-            print('\tc: ',c,'\td: ',d,'\timage_rgb: ',image_rgb)
+            print('\nc: ',c,'\nd: ',d,'\nimage_rgb: ',image_rgb,'\nimage_rgb_target: ',image_rgb[lit])
 #        for t in image_rgb:
             m=image_rgb[0].split('_')
 #            print('\nval of m: ',m)
@@ -88,13 +88,15 @@ def cropping_image(path_mask,path_rgb,dirname,image_number,lit,mask):
                 crop_img = image_rgb_rec[y:y+h, x:x+w]
                 cropped='cropped'
 #                cv2.imwrite("F:/unreal_cv_documentation/ignore_from_git/YOLO_learning/BBox-Label-Tool/Images/cropped_image/jpg/test/"+str(t),crop_img)
-                cv2.imwrite("F:/unreal_cv_documentation/my_crop/"+str(cropped)+str(n[0])+str(crop_1)+'.'+str(image_type),crop_img)
+                cv2.imwrite(dirname+str(cropped)+str(n[0])+str(crop_1)+'.'+str(image_type),crop_img)
+                print('\nNOW image_rgb: ',image_rgb)
 #                crop_1=crop_1+1
+#                F:/unreal_cv_documentation/my_crop/
             else:
                 pass
 #        return 
 
-crop_1=0
+#crop_1=0
 
 # Observing spherical movement of the camera around the object
 
@@ -110,6 +112,7 @@ crop_1=0
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
+    crop_1=0
     index_lit=0
     index_mask=2
 #    print('i is: ',i)
@@ -174,12 +177,14 @@ for i in actor_dict:
             res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)+'')
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)+'')
             res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)+'')
-            crop_1+=1
-            print('\ncrop_1: ',crop_1,'\tindex_lit: ',index_lit,'\tindex_mask: ',index_mask)
+
+            print('\ncrop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
+            
             cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,image_number=crop_1,lit=index_lit,mask=index_mask)
+            crop_1=crop_1+1
             index_lit=index_lit+3
             index_mask=index_mask+3
-            print('\nJETZT crop_1: ',crop_1,'\tindex_lit: ',index_lit,'\tindex_mask: ',index_mask)
+            print('\nJETZT crop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
             print('I AM GOING')
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
             
