@@ -1,7 +1,7 @@
 {
   "DEFAULT": {
     "polar_angle_start": 90,
-	"polar_angle_end": 80,
+	"polar_angle_end": 72,
 	"azimuthal_angle_start":0,
 	"azimuthal_angle_end":2,
 	"viewmode_1":"lit",
