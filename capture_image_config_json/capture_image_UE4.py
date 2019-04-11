@@ -56,9 +56,10 @@ for i in config['actor']:
 
 #path_mask = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/mask_calgonit'
 #path_rgb = 'F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_calgonit'
-
+#crop_1=0
 
 def cropping_image(path_mask,path_rgb,dirname,naming_rule):
+    print(path_mask)
     index_s=0
     index_t=1
     print("!!!!!!!!!FUNCTION CALL")
@@ -124,6 +125,32 @@ def cropping_image(path_mask,path_rgb,dirname,naming_rule):
                         else:
                             pass
                         #        return 
+
+def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
+    print("function_start!!!!!!!!!!!!")
+    split_lit_image_name=lit_image_name.split(".")
+    cropped="cropped"
+    
+    lit_image=path_of_image+lit_image_name
+    mask_image=path_of_image+mask_image_name
+    read_lit_image=cv2.imread(lit_image)
+    read_mask_image=cv2.imread(mask_image)
+    
+    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
+    hsv_channels = cv2.split(hsv)
+    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
+    cnt = contours[0]
+    x,y,w,h = cv2.boundingRect(cnt)
+    
+    draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
+    crop_img = draw_rec_lit_image[y:y+h, x:x+w]
+    cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
+    print("crop_done!!!!!!!!!")
+#    print("lit: ",ip)
+#    print("mask: ",op)
+#    print("crop_type: ",crop_image_type)
 
 # Observing spherical movement of the camera around the object
 
@@ -201,14 +228,25 @@ for i in actor_dict:
 #            saving the image in the desired/created folder
 #            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
 #            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(pic_num)+'.'+str(image_type)+'')
-            path_lit=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)
-            path_mask=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)
-            path_normal=str(dirName)+str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)
+            path_lit=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)
+            path_mask=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)
+            path_normal=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)
             name_crop=str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)
             
-            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(path_lit)+'')
-            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(path_mask)+'')
-#            res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(path_normal)+'')
+            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(path_lit)+'')
+            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(path_mask)+'')
+            print("\npath_lit: ",path_lit)
+            path_lit_split=path_lit.split(".")
+            print("\npath_lit_split: ",path_lit_split)
+            print("\npath_mask: ",path_mask)
+            path_mask_split=path_mask.split(".")
+            print("\npath_mask_split: ",path_mask_split)
+            print("\nimage_type: ",image_type)
+            print("i need this: ",path_lit_split[0],"\t",path_mask_split[0])
+            
+            do_crop(path_of_image=dirName,lit_image_name=path_lit,mask_image_name=path_mask,crop_image_type=image_type)
+#            res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(path_normal)+'')
+#            cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,naming_rule=name_crop)
 
 #            print('\ncrop_1: ',crop_1,'\nindex_lit: ',index_lit,'\nindex_mask: ',index_mask)
 #            cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,image_number=crop_1,lit=index_lit,mask=index_mask)
@@ -228,8 +266,10 @@ for i in actor_dict:
             
 #            print("here dirName res is: ",res)
             pic_num+=1
-    print("here dir is: ",dirName,"\npolar angle: ",polar_angle)
-    cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,naming_rule=name_crop)
+        print("hey --crop finish-- from function i am here also")
+#    print("here dir is: ",dirName,"\npolar angle: ",polar_angle)
+#    crop_1=0
+#    cropping_image(path_mask=dirName,path_rgb=dirName,dirname=dirName,naming_rule=name_crop)
     print("\n",i," :this_actor_cropping_finish")
 #    crop_1=crop_1+1
 #    index_lit=index_lit+3
