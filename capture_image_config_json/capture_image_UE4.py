@@ -19,6 +19,36 @@ import os
 import math
 #import glob
 import cv2
+crop=0
+
+
+
+def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
+#    print("function_start!!!!!!!!!!!!")
+    global crop
+    split_lit_image_name=lit_image_name.split(".")
+    cropped="cropped"
+    
+    lit_image=path_of_image+lit_image_name
+    mask_image=path_of_image+mask_image_name
+    read_lit_image=cv2.imread(lit_image)
+    read_mask_image=cv2.imread(mask_image)
+    
+    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
+    hsv_channels = cv2.split(hsv)
+    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
+    cnt = contours[0]
+    x,y,w,h = cv2.boundingRect(cnt)
+    
+    draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
+    crop_img = draw_rec_lit_image[y:y+h, x:x+w]
+    crop=crop+1
+    print("crop: ",crop)
+    cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
+    
+
 
 #config file is opening and fetching data
 with open('config_file_capture_image.json', 'r') as f:
@@ -46,27 +76,6 @@ for i in config['actor']:
     actor_dict[config['actor'][i]['actor_name']].append(config['actor'][i]['radius'])
 
 
-def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
-#    print("function_start!!!!!!!!!!!!")
-    split_lit_image_name=lit_image_name.split(".")
-    cropped="cropped"
-    
-    lit_image=path_of_image+lit_image_name
-    mask_image=path_of_image+mask_image_name
-    read_lit_image=cv2.imread(lit_image)
-    read_mask_image=cv2.imread(mask_image)
-    
-    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
-    hsv_channels = cv2.split(hsv)
-    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
-    cnt = contours[0]
-    x,y,w,h = cv2.boundingRect(cnt)
-    
-    draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
-    crop_img = draw_rec_lit_image[y:y+h, x:x+w]
-    cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
 
 
 # Observing spherical movement of the camera around the object
@@ -145,7 +154,7 @@ for i in actor_dict:
 #            print("here dirName res is: ",res)
             pic_num+=1
 #        print("for polar angle ",polar_angle," crop finish ",pic_num," times")
-
+    crop=0
     print("\nCropping_is_finish_for ",i," actor")
     
 print("\tJOB_DONE")
