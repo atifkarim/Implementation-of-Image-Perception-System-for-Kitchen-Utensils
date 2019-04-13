@@ -15,13 +15,13 @@
   "actor":
   {
   
-  "actor_1": {
+  "chair_15": {
   "actor_name":"chair_15",
     "radius":350},
 
   
   
-  "actor_3": {
+  "SM_SomatClassic_2": {
   "actor_name":"SM_SomatClassic_2",
     "radius":150}
   

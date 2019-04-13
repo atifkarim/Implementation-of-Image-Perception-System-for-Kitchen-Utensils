@@ -65,15 +65,17 @@ viewmode_3= config['DEFAULT']['viewmode_3']
 #address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
 #print("type is:",type(address))
-
+print('actor: ',config['actor'])
 actor_dict={}
 for i in config['actor']:
+    print(i)
     actor_dict[config['actor'][i]['actor_name']]=[]
     actor_dict[config['actor'][i]['actor_name']].append(polar_angle_start)
     actor_dict[config['actor'][i]['actor_name']].append(polar_angle_end)
     actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_start)
     actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_end)
     actor_dict[config['actor'][i]['actor_name']].append(config['actor'][i]['radius'])
+print(actor_dict)
 
 
 
@@ -83,6 +85,7 @@ for i in config['actor']:
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
+    print('here: ',i)
     
     print("\nJOB_START")
     pic_num=1
