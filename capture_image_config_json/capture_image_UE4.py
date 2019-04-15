@@ -37,15 +37,16 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
     hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
     hsv_channels = cv2.split(hsv)
     _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    im2,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
     cnt = contours[0]
+    print(cnt)
     x,y,w,h = cv2.boundingRect(cnt)
     
     draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
     crop_img = draw_rec_lit_image[y:y+h, x:x+w]
     crop=crop+1
-    print("crop: ",crop)
+#    print("crop: ",crop)
     cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
     
 
@@ -69,12 +70,12 @@ print('actor: ',config['actor'])
 actor_dict={}
 for i in config['actor']:
     print(i)
-    actor_dict[config['actor'][i]['actor_name']]=[]
-    actor_dict[config['actor'][i]['actor_name']].append(polar_angle_start)
-    actor_dict[config['actor'][i]['actor_name']].append(polar_angle_end)
-    actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_start)
-    actor_dict[config['actor'][i]['actor_name']].append(azimuthal_angle_end)
-    actor_dict[config['actor'][i]['actor_name']].append(config['actor'][i]['radius'])
+    actor_dict[i]=[]
+    actor_dict[i].append(polar_angle_start)
+    actor_dict[i].append(polar_angle_end)
+    actor_dict[i].append(azimuthal_angle_start)
+    actor_dict[i].append(azimuthal_angle_end)
+    actor_dict[i].append(config['actor'][i]['radius'])
 print(actor_dict)
 
 
@@ -104,8 +105,10 @@ for i in actor_dict:
         
 #    getting the present actor's location
     actor_location=client.request('vget /object/'+str(i)+'/location')
+    print(actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
     actor_location_array=np.array(actor_location)
+    print(actor_location_array)
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
@@ -150,7 +153,7 @@ for i in actor_dict:
         
 # =============================================================================
 #             old code , you can ignore it
-#             res = client.request('vget /camera/0/camera_view_type address'+str(pic_num)+'.png')
+#            res = client.request('vget /camera/0/viewmode_1 address'+str(pic_num)+'.png')
 #             res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
 # =============================================================================
             
