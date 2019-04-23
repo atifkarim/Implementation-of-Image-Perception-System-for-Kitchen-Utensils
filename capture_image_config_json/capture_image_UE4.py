@@ -40,7 +40,7 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
     im2,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
     cnt = contours[0]
-    print(cnt)
+#    print(cnt)
     x,y,w,h = cv2.boundingRect(cnt)
     
     draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
@@ -86,6 +86,10 @@ print(actor_dict)
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
+    hide=client.request('vset /object/'+str(i)+'/hide')
+
+for i in actor_dict:
+    show=client.request('vset /object/'+str(i)+'/show')
     print('here: ',i)
     
     print("\nJOB_START")
@@ -108,7 +112,7 @@ for i in actor_dict:
     print(actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
     actor_location_array=np.array(actor_location)
-    print(actor_location_array)
+#    print(actor_location_array)
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
@@ -162,6 +166,9 @@ for i in actor_dict:
 #        print("for polar angle ",polar_angle," crop finish ",pic_num," times")
     crop=0
     print("\nCropping_is_finish_for ",i," actor")
+    hide=client.request('vset /object/'+str(i)+'/hide')
     
 print("\tJOB_DONE")
         
+for i in actor_dict:
+    hide=client.request('vset /object/'+str(i)+'/show')

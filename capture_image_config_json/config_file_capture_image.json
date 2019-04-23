@@ -3,7 +3,7 @@
     "polar_angle_start": 90,
 	"polar_angle_end": 0,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":1,
+	"azimuthal_angle_end":2,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
 	"viewmode_3":"normal",
@@ -21,6 +21,10 @@
 
   
   "SM_SomatClassic_2": {
+  
+    "radius":300},
+    
+  "SM_CalgonitFinish_2":{
   
     "radius":300}
   
