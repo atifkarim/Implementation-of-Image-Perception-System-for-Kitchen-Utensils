@@ -57,14 +57,19 @@ with open('config_file_capture_image.json', 'r') as f:
 
 polar_angle_start= config['DEFAULT']['polar_angle_start']
 polar_angle_end = config['DEFAULT']['polar_angle_end']
+polar_angle_step = config['DEFAULT']['polar_angle_step']
 azimuthal_angle_start= config['DEFAULT']['azimuthal_angle_start']
 azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
-
+azimuthal_angle_step= config['DEFAULT']['azimuthal_angle_step']
+#print('pola_step: ',polar_angle_step,'\t azi step: ',azimuthal_angle_step)
 viewmode_1= config['DEFAULT']['viewmode_1']
 viewmode_2= config['DEFAULT']['viewmode_2']
 viewmode_3= config['DEFAULT']['viewmode_3']
 #address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
+
+#actor_list= config['DEFAULT']['actor_list']
+#actor_list=client.request(actor_list)
 #print("type is:",type(address))
 print('actor: ',config['actor'])
 actor_dict={}
@@ -79,7 +84,9 @@ for i in config['actor']:
 print(actor_dict)
 
 
-
+#print('type: ',type(actor_list),'\n list: ',actor_list)
+#res_list=client.request('vget /objects')
+#print('res_type: ',type(res_list),'res_list: ',res_list)
 
 # Observing spherical movement of the camera around the object
 # the area cover with polar_angle/elevation angle is 'Latitude' region. From north to South or vice versa
@@ -116,14 +123,14 @@ for i in actor_dict:
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
-    for polar_angle in range(polar_angle_start,polar_angle_end,-10):
+    for polar_angle in range(polar_angle_start,polar_angle_end,polar_angle_step):
     
 #        calculating the pitch value for different polar angle
         pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
     
         yaw=180 #rotaion around the z-axis(you can denote by 'beta')
         roll=0 #rotaion around x-axis(you can denote by 'gamma')
-        for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,1):
+        for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,azimuthal_angle_step):
 #            print('I AM HERE!!!')
             centre_x=actor_location_array[0]      #centre of the object with respect to x-axis
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
@@ -171,4 +178,4 @@ for i in actor_dict:
 print("\tJOB_DONE")
         
 for i in actor_dict:
-    hide=client.request('vset /object/'+str(i)+'/show')
+    show_again=client.request('vset /object/'+str(i)+'/show')

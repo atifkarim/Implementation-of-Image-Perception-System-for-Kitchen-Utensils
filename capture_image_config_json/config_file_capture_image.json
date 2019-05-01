@@ -1,14 +1,17 @@
 {
   "DEFAULT": {
     "polar_angle_start": 90,
-	"polar_angle_end": 0,
+	"polar_angle_end": 10,
+	"polar_angle_step":-10,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":2,
+	"azimuthal_angle_end":1,
+	"azimuthal_angle_step":1,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
 	"viewmode_3":"normal",
 	"address":"F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/config_json/",
-	"image_type":"png"
+	"image_type":"png",
+	"actor_list":"vget /objects"
 	
   },
   
@@ -24,9 +27,8 @@
   
     "radius":300},
     
-  "SM_CalgonitFinish_2":{
+    "SM_CalgonitFinish_2": {
   
     "radius":300}
-  
   }
 }
