@@ -11,7 +11,7 @@ if not client.isconnected():
 
 res = client.request('vget /unrealcv/status')
 # The image resolution and port is configured in the config file.
-#print(res)
+print('status: ',res)
 
 import json
 import numpy as np
@@ -94,10 +94,11 @@ print(actor_dict)
 
 for i in actor_dict:
     hide=client.request('vset /object/'+str(i)+'/hide')
+    print('hidden actor: ',i,'\t',hide)
 
 for i in actor_dict:
     show=client.request('vset /object/'+str(i)+'/show')
-    print('here: ',i)
+    print('visible actor: ',i,'\t',show)
     
     print("\nJOB_START")
     pic_num=1
@@ -157,7 +158,7 @@ for i in actor_dict:
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
             res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
             
-            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
+#            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
@@ -179,3 +180,4 @@ print("\tJOB_DONE")
         
 for i in actor_dict:
     show_again=client.request('vset /object/'+str(i)+'/show')
+    print('NOW visible actor: ',i,'\t',show_again)
