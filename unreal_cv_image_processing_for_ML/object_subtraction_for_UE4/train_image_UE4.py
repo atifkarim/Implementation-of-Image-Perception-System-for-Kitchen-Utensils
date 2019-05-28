@@ -37,13 +37,13 @@ from keras import backend as K
 K.set_image_data_format('channels_first')
 
 from matplotlib import pyplot as plt
-import cv2
 #%matplotlib inline
 
 #import keras
 
 NUM_CLASSES = 5
 IMG_SIZE = 48
+IMG_depth = 3
 
 
 ###################################
@@ -53,17 +53,15 @@ IMG_SIZE = 48
 #for gray scale
 def preprocess_img(img):
     # Histogram normalization in y
-#     hsv = color.rgb2hsv(img)
-#     hsv[:,:,2] = exposure.equalize_hist(hsv[:,:,2])
-#     img = color.hsv2rgb(hsv)
+    hsv = color.rgb2hsv(img)
+    hsv[:,:,2] = exposure.equalize_hist(hsv[:,:,2])
+    img = color.hsv2rgb(hsv)
 
     # central scrop
     min_side = min(img.shape[:-1])
     centre = img.shape[0]//2, img.shape[1]//2
-    img = img[centre[0]-min_side//2:centre[0]+min_side//2,
-              centre[1]-min_side//2:centre[1]+min_side//2,
-              :]
-    img = rgb2gray(img)
+    img = img[centre[0]-min_side//2:centre[0]+min_side//2,centre[1]-min_side//2:centre[1]+min_side//2,:]
+#    img = rgb2gray(img)
 
     # rescale to standard size
     img = transform.resize(img, (IMG_SIZE, IMG_SIZE))
@@ -113,11 +111,11 @@ Y = np.eye(NUM_CLASSES, dtype='uint8')[labels] #labels of the image
 
 X = np.array(imgs, dtype='float32')
 print(X.shape)
-# plt.imshow(X[0])
-# plt.imshow(X[0],cmap="gray")
+#plt.imshow(X[0])
+#plt.imshow(X[0],cmap="gray")
 #plt.imshow(X[0]) #if you use this command here you will see something coloured image. No problem, it is gray image. 
                         #To see full Black and white image uncomment the previous line.
-X = X.reshape(len(imgs),3,IMG_SIZE,IMG_SIZE) # write (IMG_SIZE,IMG_SIZE,1 if you want channel last; 1= grayscale;3=RGB)
+X = X.reshape(len(imgs),IMG_depth,IMG_SIZE,IMG_SIZE) # write (IMG_SIZE,IMG_SIZE,1 if you want channel last; 1= grayscale;3=RGB)
 # plt.imshow(X[0],cmap="gray")
 print(X.shape)
 print(X.ndim)
