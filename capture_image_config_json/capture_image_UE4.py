@@ -22,6 +22,50 @@ import shutil
 import cv2
 crop=0
 
+def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
+    
+    print('annotation path: ',path_of_image)
+    name_1=rgb_image_name.split(".")
+    mask_image=dirName+mask_image_name
+    rgb_image=dirName+rgb_image_name
+    image_mask=cv2.imread(mask_image)
+    hsv = cv2.cvtColor(image_mask, cv2.COLOR_BGR2HSV)
+    hsv_channels = cv2.split(hsv)
+
+    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image_mask, contours, 0, (0,255,0), 3)
+    print('contours: ',len(contours))
+    if len(contours)>0:
+        cnt = contours[0]
+        x,y,w,h = cv2.boundingRect(cnt)
+        image_rgb=cv2.imread(rgb_image)
+        image_rgb_rec=cv2.rectangle(image_rgb,(x,y),(x+w,y+h),(255,255,255),1)
+        print(' here the val: ',x," ",y," ",x+w," ",y+h)
+        
+        f = open(path_of_image+str(name_1[0])+'.txt', 'w')
+        f.write('00'+str(class_number)+"\n")
+        f.write(str(x)+' ')
+        f.write(str(y)+' ')
+        f.write(str(x+w)+' ')
+        f.write(str(y+h)+' ')
+        f.close()
+#        text_num+=1
+    else:
+        pass
+    
+#    image_rgb=cv2.imread(rgb_image)
+#    image_rgb_rec=cv2.rectangle(image_rgb,(x,y),(x+w,y+h),(255,255,255),1)
+#    print(' here the val: ',x," ",y," ",x+w," ",y+h)
+#    f = open("E:/005/"+'calgonit_'+str(m[0])+'.txt', 'w')
+#    f.write('005'+"\n")
+#    f.write('00'+bi+"\n")
+#    f.write(str(x)+' ')
+#    f.write(str(y)+' ')
+#    f.write(str(x+w)+' ')
+#    f.write(str(y+h)+' ')
+#    f.close()
+
 
 
 def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
@@ -105,6 +149,7 @@ for i in actor_dict:
     
     print("\nJOB_START")
     pic_num=1
+#    text_num=1
     
 #    creating directory to save present actor's captured image. here at firts create the folder written inside the inverted comma
 #    for example here it is  F:/unreal_cv_documentation/my_dir/
@@ -166,7 +211,7 @@ for i in actor_dict:
             res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(lit_name)+'')
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
             res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
-            
+            do_annotation(dirName,mask_name,lit_name,object_class)
          #   do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
             
 #             if you want to use address info from config file then please use the following line

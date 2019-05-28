@@ -17,21 +17,29 @@
   
   "actor":
   {
+  "Chair_15":{
+  "radius":300,
+  "class":1},
   
-  "chair_15": {
-  
-    "radius":220,
-    "class":1},
-
-  
-  "SM_SomatClassic_2": {
-  
-    "radius":300,
-    "class":2},
+  "SM_SomatClassic_2":{
+  "radius":300,
+  "class":2},
+      
     
     "SM_CalgonitFinish_2": {
   
     "radius":300,
-    "class":3}
+    "class":3},
+    
+    "SM_Rock_2":{
+    
+    "radius":300,
+    "class":4},
+    
+    
+    "SM_Couch_5":{
+    
+    "radius":300,
+    "class":5}
   }
 }
