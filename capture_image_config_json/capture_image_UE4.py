@@ -1,3 +1,7 @@
+# check
+# https://stackoverflow.com/questions/36098241/using-findcontours-in-python-with-opencv
+# https://stackoverflow.com/questions/36160638/opencv-contours-in-python-how-to-solve-list-index-out-of-range?noredirect=1&lq=1
+
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
 # Establish connection with the UE4 game
@@ -24,17 +28,27 @@ crop=0
 
 def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
     
-    print('annotation path: ',path_of_image)
+#    print('annotation path: ',path_of_image)
     name_1=rgb_image_name.split(".")
     mask_image=dirName+mask_image_name
     rgb_image=dirName+rgb_image_name
     image_mask=cv2.imread(mask_image)
-    hsv = cv2.cvtColor(image_mask, cv2.COLOR_BGR2HSV)
-    hsv_channels = cv2.split(hsv)
-
-    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(image_mask, contours, 0, (0,255,0), 3)
+    
+    image_mask_copy = image_mask.copy()
+    imgray=cv2.cvtColor(image_mask,cv2.COLOR_BGR2GRAY)
+    ret,thresh = cv2.threshold(imgray,127,255,0)
+    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
+    
+    
+    
+    
+#    hsv = cv2.cvtColor(image_mask, cv2.COLOR_BGR2HSV)
+#    hsv_channels = cv2.split(hsv)
+#
+#    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+#    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#    cv2.drawContours(image_mask, contours, 0, (0,255,0), 3)
     print('contours: ',len(contours))
     if len(contours)>0:
         cnt = contours[0]
