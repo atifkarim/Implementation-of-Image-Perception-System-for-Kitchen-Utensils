@@ -1,10 +1,10 @@
 {
   "DEFAULT": {
     "polar_angle_start": 90,
-	"polar_angle_end": 60,
+	"polar_angle_end": 70,
 	"polar_angle_step":-10,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":1,
+	"azimuthal_angle_end":2,
 	"azimuthal_angle_step":1,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
