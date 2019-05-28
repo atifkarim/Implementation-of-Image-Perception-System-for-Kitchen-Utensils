@@ -1,5 +1,6 @@
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
+import numpy as np
 
 # Establish connection with the UE4 game
 
@@ -7,6 +8,14 @@ from configparser import SafeConfigParser
 
 parser = SafeConfigParser()
 parser.read('capture_image_config.ini')
+
+actor=parser.get('capture_image','actor')
+print("actor: ",actor)
+x_actor = actor.split(', ',1)
+print("x_actor type after splitting: ",type(x_actor),"\nx_actor after splitting: ",x_actor)
+x_actor_array=np.array(x_actor)
+print("x_actor_array type: ",type(x_actor_array))
+print("x_actor_array: ",x_actor_array)
 
 polar_angle_start=parser.get('capture_image', 'polar_angle_start')
 polar_angle_start=int(polar_angle_start)
