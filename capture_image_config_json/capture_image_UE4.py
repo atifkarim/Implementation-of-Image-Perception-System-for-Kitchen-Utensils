@@ -17,6 +17,7 @@ import json
 import numpy as np
 import os
 import math
+import shutil
 #import glob
 import cv2
 crop=0
@@ -93,6 +94,7 @@ print(actor_dict)
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
+    print('i is: ',i)
     hide=client.request('vset /object/'+str(i)+'/hide')
     print('hidden actor: ',i,'\t',hide)
 
@@ -113,6 +115,10 @@ for i in actor_dict:
         os.mkdir(dirName)
         print("Directory " , dirName ,  " Created ")
     else:
+        shutil.rmtree(dirName,ignore_errors=True)
+        print('deleted old folder')
+        os.mkdir(dirName)
+        print('created new folder')
         print("Directory " , dirName ,  " already exists")
         
 #    getting the present actor's location
