@@ -81,6 +81,7 @@ for i in config['actor']:
     actor_dict[i].append(polar_angle_end)
     actor_dict[i].append(azimuthal_angle_start)
     actor_dict[i].append(azimuthal_angle_end)
+    actor_dict[i].append(config['actor'][i]['class'])
     actor_dict[i].append(config['actor'][i]['radius'])
 print(actor_dict)
 
@@ -143,6 +144,8 @@ for i in actor_dict:
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
             radius= actor_dict[i][-1]
+            object_class=actor_dict[i][-2]
+#            print('here object_class: ',object_class,' and type: ',type(object_class))
             
 #            Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
 #            print('radius is: ',radius)

@@ -1,7 +1,7 @@
 {
   "DEFAULT": {
     "polar_angle_start": 90,
-	"polar_angle_end": 70,
+	"polar_angle_end": 80,
 	"polar_angle_step":-10,
 	"azimuthal_angle_start":0,
 	"azimuthal_angle_end":2,
@@ -20,15 +20,18 @@
   
   "chair_15": {
   
-    "radius":220},
+    "radius":220,
+    "class":1},
 
   
   "SM_SomatClassic_2": {
   
-    "radius":300},
+    "radius":300,
+    "class":2},
     
     "SM_CalgonitFinish_2": {
   
-    "radius":300}
+    "radius":300,
+    "class":3}
   }
 }
