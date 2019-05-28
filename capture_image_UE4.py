@@ -32,7 +32,7 @@ azimuthal_angle_end = int(input('Enter azimuthal_angle_end value:'))
 
 pic_num=1
 
-for polar_angle in range(polar_angle_start,polar_angle_end,-30):
+for polar_angle in range(polar_angle_start,polar_angle_end,-10):
     
     #calculating the pitch value for different polar angle
     pitch=(180-(90+polar_angle))*(-1) #rotation around the y axis(you can denote by alpha)
@@ -41,10 +41,10 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-30):
     roll=0 #rotaion around x-axis(you can denote by 'gamma')
     for azimuthal_angle in range(azimuthal_angle_start,azimuthal_angle_end,1):
         
-        centre_x=-45    #centre of the object with respect to x-axis
-        centre_y=0      #centre of the object with respect to y-axis
-        centre_z=32     #centre of the object with respect to z-axis
-        radius=350      #randomly choosen a distance betwen object and camera
+        centre_x=-230    #centre of the object with respect to x-axis
+        centre_y=160      #centre of the object with respect to y-axis
+        centre_z=40   #centre of the object with respect to z-axis
+        radius=100     #randomly choosen a distance betwen object and camera
                         #from where the object is clearly visible
         
         #Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
@@ -57,9 +57,9 @@ for polar_angle in range(polar_angle_start,polar_angle_end,-30):
         yaw+=1 # yaw value is increasing to look at the object
         
         #Comment out the following line to save image
-		#res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
+        res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table/'+str(pic_num)+'.png')
         #res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
         pic_num+=1
-    print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
+#    print("polar_angle",polar_angle,"\z:",z,"\tpitch:",pitch,"\n")
         
         
