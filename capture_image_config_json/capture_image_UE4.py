@@ -1,6 +1,8 @@
 # check
 # https://stackoverflow.com/questions/36098241/using-findcontours-in-python-with-opencv
 # https://stackoverflow.com/questions/36160638/opencv-contours-in-python-how-to-solve-list-index-out-of-range?noredirect=1&lq=1
+#https://stackoverflow.com/questions/31475634/drawcontours-not-working-opencv-python
+
 
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
@@ -93,20 +95,26 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
     read_lit_image=cv2.imread(lit_image)
     read_mask_image=cv2.imread(mask_image)
     
-    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
-    hsv_channels = cv2.split(hsv)
-    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-    im2,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
-    cnt = contours[0]
-#    print(cnt)
-    x,y,w,h = cv2.boundingRect(cnt)
+    image_mask_copy = read_mask_image.copy()
+    imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2HSV)
+    ret,thresh = cv2.threshold(imgray,127,255,0)
+    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
     
-    draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
-    crop_img = draw_rec_lit_image[y:y+h, x:x+w]
-    crop=crop+1
-#    print("crop: ",crop)
-    cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
+#    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
+#    hsv_channels = cv2.split(hsv)
+#    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
+#    im2,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
+    if len(contours)>0:
+        cnt = contours[0]
+        x,y,w,h = cv2.boundingRect(cnt)
+    
+        draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
+        crop_img = draw_rec_lit_image[y:y+h, x:x+w]
+        crop=crop+1
+        cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
+        print('CROP SUCCESSFULL!!!')
     
 
 
@@ -226,7 +234,7 @@ for i in actor_dict:
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
             res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
             do_annotation(dirName,mask_name,lit_name,object_class)
-         #   do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
+            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
