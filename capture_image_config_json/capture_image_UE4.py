@@ -28,6 +28,9 @@ import shutil
 import cv2
 crop=0
 
+hide_Floor=client.request('vset /object/Floor/hide')
+hide_Floor_14=client.request('vset /object/Floor_14/hide')
+
 def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
     
 #    print('annotation path: ',path_of_image)
@@ -138,10 +141,10 @@ image_type= config['DEFAULT']['image_type']
 #actor_list= config['DEFAULT']['actor_list']
 #actor_list=client.request(actor_list)
 #print("type is:",type(address))
-print('actor: ',config['actor'])
+#print('actor: ',config['actor'])
 actor_dict={}
 for i in config['actor']:
-    print(i)
+#    print(i)
     actor_dict[i]=[]
     actor_dict[i].append(polar_angle_start)
     actor_dict[i].append(polar_angle_end)
@@ -149,7 +152,7 @@ for i in config['actor']:
     actor_dict[i].append(azimuthal_angle_end)
     actor_dict[i].append(config['actor'][i]['class'])
     actor_dict[i].append(config['actor'][i]['radius'])
-print(actor_dict)
+#print(actor_dict)
 
 
 #print('type: ',type(actor_list),'\n list: ',actor_list)
@@ -161,15 +164,15 @@ print(actor_dict)
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
 
 for i in actor_dict:
-    print('i is: ',i)
+#    print('i is: ',i)
     hide=client.request('vset /object/'+str(i)+'/hide')
-    print('hidden actor: ',i,'\t',hide)
+#    print('hidden actor: ',i,'\t',hide)
 
 for i in actor_dict:
     show=client.request('vset /object/'+str(i)+'/show')
-    print('visible actor: ',i,'\t',show)
+#    print('visible actor: ',i,'\t',show)
     
-    print("\nJOB_START")
+#    print("\nJOB_START")
     pic_num=1
 #    text_num=1
     
@@ -177,19 +180,21 @@ for i in actor_dict:
 #    for example here it is  F:/unreal_cv_documentation/my_dir/
     
     dirName='F:/unreal_cv_documentation/my_dir/'+str(i)+'/'
+    my_dir= 'F:/unreal_cv_documentation/my_dir/'+str(i)
 #    print(dirName)
 
     if not os.path.exists(dirName):
         os.mkdir(dirName)
         print("Directory " , dirName ,  " Created ")
     else:
-        shutil.rmtree(dirName,ignore_errors=True)
+        shutil.rmtree(my_dir,ignore_errors=True)
         print('deleted old folder')
         os.mkdir(dirName)
         print('created new folder')
-        print("Directory " , dirName ,  " already exists")
+#        print("Directory " , dirName ,  " already exists")
         
 #    getting the present actor's location
+    
     actor_location=client.request('vget /object/'+str(i)+'/location')
     print(actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
@@ -233,8 +238,8 @@ for i in actor_dict:
             res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(lit_name)+'')
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
             res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
-            do_annotation(dirName,mask_name,lit_name,object_class)
-            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
+            #do_annotation(dirName,mask_name,lit_name,object_class)
+            #do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
@@ -244,16 +249,21 @@ for i in actor_dict:
 #            res = client.request('vget /camera/0/viewmode_1 address'+str(pic_num)+'.png')
 #             res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
 # =============================================================================
-            
+            hide=client.request('vset /object/'+str(i)+'/hide')
+            res_lit_only_env = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(pic_num)+"_env"+'.'+str(image_type))
+            print('name here: ',res_lit_only_env)
+            show=client.request('vset /object/'+str(i)+'/show')
 #            print("here dirName res is: ",res)
             pic_num+=1
 #        print("for polar angle ",polar_angle," crop finish ",pic_num," times")
     crop=0
-    print("\nCropping_is_finish_for ",i," actor")
+#    print("\nCropping_is_finish_for ",i," actor")
     hide=client.request('vset /object/'+str(i)+'/hide')
     
 print("\tJOB_DONE")
         
 for i in actor_dict:
     show_again=client.request('vset /object/'+str(i)+'/show')
-    print('NOW visible actor: ',i,'\t',show_again)
+#    print('NOW visible actor: ',i,'\t',show_again)
+show_Floor=client.request('vset /object/Floor/show')
+show_Floor_14=client.request('vset /object/Floor_14/show')
