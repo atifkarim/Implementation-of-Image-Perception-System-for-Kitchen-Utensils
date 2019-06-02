@@ -1,10 +1,10 @@
 {
   "DEFAULT": {
     "polar_angle_start": 90,
-	"polar_angle_end": 80,
-	"polar_angle_step":-10,
+	"polar_angle_end": 10,
+	"polar_angle_step":-5,
 	"azimuthal_angle_start":0,
-	"azimuthal_angle_end":2,
+	"azimuthal_angle_end":1,
 	"azimuthal_angle_step":1,
 	"viewmode_1":"lit",
 	"viewmode_2":"object_mask",
@@ -17,6 +17,12 @@
   
   "actor":
   {
+  
+  "SM_CalgonitFinishKlarspueler_2": {
+    "radius":300,
+    "class":3},
+    
+    
   "Chair_15":{
   "radius":300,
   "class":1},
@@ -24,39 +30,14 @@
   "SM_SomatClassic_2":{
   "radius":300,
   "class":2},
-      
-    
-  "SM_CalgonitFinish_2": {
+	
+	"SM_CalgonitFinishMaschinenpfleger_5": {
     "radius":300,
     "class":3},
     
-    "SM_DenkMitEdelstahlreiniger_14": {
+    "SM_CalgonitFinish_2": {
     "radius":300,
-    "class":4},
-    
-    "SM_CalgonitFinishKlarspueler_2": {
-    "radius":300,
-    "class":5},
-    
-    "SM_DenkMitEntkalker_20": {
-    "radius":300,
-    "class":6},
-    
-    "SM_DenkMitEdelstahlReinigerSpray_17": {
-    "radius":300,
-    "class":7},
-    
-    "SM_CalgonitFinishVorratspack_11": {
-    "radius":300,
-    "class":8},
-    
-    "SM_CalgonitFinishSpezialSalz_8": {
-    "radius":300,
-    "class":9},
-    
-    "SM_CalgonitFinishMaschinenpfleger_5": {
-    "radius":300,
-    "class":10},
+    "class":4}
     
   }
 }
