@@ -28,8 +28,8 @@ import shutil
 import cv2
 crop=0
 
-hide_Floor=client.request('vset /object/Floor/hide')
-hide_Floor_14=client.request('vset /object/Floor_14/hide')
+#hide_Floor=client.request('vset /object/Floor/hide')
+#hide_Floor_14=client.request('vset /object/Floor_14/hide')
 
 def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
     
@@ -99,8 +99,9 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
     read_mask_image=cv2.imread(mask_image)
     
     image_mask_copy = read_mask_image.copy()
-    imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2HSV)
+    imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2GRAY)
     ret,thresh = cv2.threshold(imgray,127,255,0)
+#    print('Till now OK')
     image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
     
@@ -110,6 +111,7 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
 #    im2,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 #    cv2.drawContours(read_mask_image, contours, 0, (0,255,0), 3)
     if len(contours)>0:
+        print('length is: ',len(contours))
         cnt = contours[0]
         x,y,w,h = cv2.boundingRect(cnt)
     
@@ -118,7 +120,10 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
         crop=crop+1
         cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
         print('CROP SUCCESSFULL!!!')
-    
+    else:
+        print('here length is: ',len(contours))
+        print('NO Crop has done')
+        pass
 
 
 #config file is opening and fetching data
@@ -170,6 +175,8 @@ for i in actor_dict:
 
 for i in actor_dict:
     show=client.request('vset /object/'+str(i)+'/show')
+    set_mask_color= client.request('vset /object/'+str(i)+'/color 255 255 255')
+    print('set mask color: ',set_mask_color)
 #    print('visible actor: ',i,'\t',show)
     
 #    print("\nJOB_START")
@@ -185,18 +192,18 @@ for i in actor_dict:
 
     if not os.path.exists(dirName):
         os.mkdir(dirName)
-        print("Directory " , dirName ,  " Created ")
+#        print("Directory " , dirName ,  " Created ")
     else:
         shutil.rmtree(my_dir,ignore_errors=True)
-        print('deleted old folder')
+#        print('deleted old folder')
         os.mkdir(dirName)
-        print('created new folder')
+#        print('created new folder')
 #        print("Directory " , dirName ,  " already exists")
         
 #    getting the present actor's location
     
     actor_location=client.request('vget /object/'+str(i)+'/location')
-    print(actor_location)
+#    print(actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
     actor_location_array=np.array(actor_location)
 #    print(actor_location_array)
@@ -237,9 +244,9 @@ for i in actor_dict:
             
             res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(lit_name)+'')
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
-            res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
+            #res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
             #do_annotation(dirName,mask_name,lit_name,object_class)
-            #do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
+            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
@@ -249,10 +256,10 @@ for i in actor_dict:
 #            res = client.request('vget /camera/0/viewmode_1 address'+str(pic_num)+'.png')
 #             res = client.request('vget /camera/0/lit F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/'+str(pic_num)+'.png')
 # =============================================================================
-            hide=client.request('vset /object/'+str(i)+'/hide')
-            res_lit_only_env = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(pic_num)+"_env"+'.'+str(image_type))
-            print('name here: ',res_lit_only_env)
-            show=client.request('vset /object/'+str(i)+'/show')
+            #hide=client.request('vset /object/'+str(i)+'/hide')
+            #res_lit_only_env = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(pic_num)+"_env"+'.'+str(image_type))
+#            print('name here: ',res_lit_only_env)
+            #show=client.request('vset /object/'+str(i)+'/show')
 #            print("here dirName res is: ",res)
             pic_num+=1
 #        print("for polar angle ",polar_angle," crop finish ",pic_num," times")
