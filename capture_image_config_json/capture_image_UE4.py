@@ -28,8 +28,8 @@ import shutil
 import cv2
 crop=0
 
-#hide_Floor=client.request('vset /object/Floor/hide')
-#hide_Floor_14=client.request('vset /object/Floor_14/hide')
+hide_Floor=client.request('vset /object/Floor/hide')
+hide_Floor_14=client.request('vset /object/Floor_14/hide')
 
 def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
     
@@ -100,7 +100,7 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
     
     image_mask_copy = read_mask_image.copy()
     imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2GRAY)
-    ret,thresh = cv2.threshold(imgray,127,255,0)
+    ret,thresh = cv2.threshold(imgray,127,255,1)
 #    print('Till now OK')
     image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
@@ -175,7 +175,7 @@ for i in actor_dict:
 
 for i in actor_dict:
     show=client.request('vset /object/'+str(i)+'/show')
-    set_mask_color= client.request('vset /object/'+str(i)+'/color 255 255 255')
+    set_mask_color= client.request('vset /object/'+str(i)+'/color 255 0 0')
     print('set mask color: ',set_mask_color)
 #    print('visible actor: ',i,'\t',show)
     
