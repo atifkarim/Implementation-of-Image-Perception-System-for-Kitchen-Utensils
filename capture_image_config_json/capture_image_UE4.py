@@ -31,79 +31,40 @@ crop=0
 hide_Floor=client.request('vset /object/Floor/hide')
 hide_Floor_14=client.request('vset /object/Floor_14/hide')
 
-def do_annotation(path_of_image,mask_image_name,rgb_image_name,class_number):
+def do_annotation(path_of_text_file,split_lit_image_name_0,x_1,y_1,x_2,y_2,class_number):
     
-#    print('annotation path: ',path_of_image)
-    name_1=rgb_image_name.split(".")
-    mask_image=dirName+mask_image_name
-    rgb_image=dirName+rgb_image_name
-    image_mask=cv2.imread(mask_image)
-    
-    image_mask_copy = image_mask.copy()
-    imgray=cv2.cvtColor(image_mask,cv2.COLOR_BGR2GRAY)
-    ret,thresh = cv2.threshold(imgray,127,255,0)
-    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
+    f = open(path_of_text_file+str(split_lit_image_name_0)+'.txt', 'w')
+    f.write('00'+str(class_number)+"\n")
+    f.write(str(x_1)+' ')
+    f.write(str(y_1)+' ')
+    f.write(str(x_2)+' ')
+    f.write(str(y_2)+' ')
+    f.close()    
+
+    print('Pre Annotation File has made !!')
     
     
-    
-    
-#    hsv = cv2.cvtColor(image_mask, cv2.COLOR_BGR2HSV)
-#    hsv_channels = cv2.split(hsv)
-#
-#    _,thresh=cv2.threshold(hsv_channels[1],140,255,cv2.THRESH_BINARY_INV)
-#    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-#    cv2.drawContours(image_mask, contours, 0, (0,255,0), 3)
-    print('contours: ',len(contours))
-    if len(contours)>0:
-        cnt = contours[0]
-        x,y,w,h = cv2.boundingRect(cnt)
-        image_rgb=cv2.imread(rgb_image)
-        image_rgb_rec=cv2.rectangle(image_rgb,(x,y),(x+w,y+h),(255,255,255),1)
-        print(' here the val: ',x," ",y," ",x+w," ",y+h)
-        
-        f = open(path_of_image+str(name_1[0])+'.txt', 'w')
-        f.write('00'+str(class_number)+"\n")
-        f.write(str(x)+' ')
-        f.write(str(y)+' ')
-        f.write(str(x+w)+' ')
-        f.write(str(y+h)+' ')
-        f.close()
-#        text_num+=1
-    else:
-        pass
-    
-#    image_rgb=cv2.imread(rgb_image)
-#    image_rgb_rec=cv2.rectangle(image_rgb,(x,y),(x+w,y+h),(255,255,255),1)
-#    print(' here the val: ',x," ",y," ",x+w," ",y+h)
-#    f = open("E:/005/"+'calgonit_'+str(m[0])+'.txt', 'w')
-#    f.write('005'+"\n")
-#    f.write('00'+bi+"\n")
-#    f.write(str(x)+' ')
-#    f.write(str(y)+' ')
-#    f.write(str(x+w)+' ')
-#    f.write(str(y+h)+' ')
-#    f.close()
 
 
 
-def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
+def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name,crop_image_type,class_number,path_of_TEXT):
 #    print("function_start!!!!!!!!!!!!")
     global crop
     split_lit_image_name=lit_image_name.split(".")
+    split_lit_image_name_0 = split_lit_image_name[0]
     cropped="cropped"
     
-    lit_image=path_of_image+lit_image_name
-    mask_image=path_of_image+mask_image_name
+    lit_image=path_of_RGB+lit_image_name
+    mask_image=path_of_MASK+mask_image_name
     read_lit_image=cv2.imread(lit_image)
     read_mask_image=cv2.imread(mask_image)
     
-    image_mask_copy = read_mask_image.copy()
+   # image_mask_copy = read_mask_image.copy()
     imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2GRAY)
     ret,thresh = cv2.threshold(imgray,127,255,1)
 #    print('Till now OK')
     image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
+    #cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
     
 #    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
 #    hsv_channels = cv2.split(hsv)
@@ -118,11 +79,26 @@ def do_crop(path_of_image,lit_image_name,mask_image_name,crop_image_type):
         draw_rec_lit_image=cv2.rectangle(read_lit_image,(x,y),(x+w,y+h),(255,255,255),1)
         crop_img = draw_rec_lit_image[y:y+h, x:x+w]
         crop=crop+1
-        cv2.imwrite(str(path_of_image)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
-        print('CROP SUCCESSFULL!!!')
+        cv2.imwrite(str(path_of_CROP)+str(split_lit_image_name[0])+"_"+str(cropped)+"."+str(crop_image_type),crop_img)
+        print('CROP done')
+        x_1=x
+        y_1=y
+        x_2=x+w
+        y_2=y+h
+        do_annotation(path_of_TEXT,split_lit_image_name_0,x_1,y_1,x_2,y_2,class_number)
+        
+#        f = open(path_of_image+str(split_lit_image_name[0])+'.txt', 'w')
+#        f.write('00'+str(class_number)+"\n")
+#        f.write(str(x)+' ')
+#        f.write(str(y)+' ')
+#        f.write(str(x+w)+' ')
+#        f.write(str(y+h)+' ')
+#        f.close()
+#        
+#        print('Pre Annotation File has made !!')
     else:
         print('here length is: ',len(contours))
-        print('NO Crop has done')
+        print('-----NO Crop has done. No text file has made-----')
         pass
 
 
@@ -140,6 +116,7 @@ azimuthal_angle_step= config['DEFAULT']['azimuthal_angle_step']
 viewmode_1= config['DEFAULT']['viewmode_1']
 viewmode_2= config['DEFAULT']['viewmode_2']
 viewmode_3= config['DEFAULT']['viewmode_3']
+viewmode_crop= config['DEFAULT']['viewmode_crop']
 #address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
 
@@ -174,29 +151,52 @@ for i in actor_dict:
 #    print('hidden actor: ',i,'\t',hide)
 
 for i in actor_dict:
+    object_class=actor_dict[i][-2]
+    
+    print('Working with ',i,' whose class is ',object_class,' has started')
     show=client.request('vset /object/'+str(i)+'/show')
     set_mask_color= client.request('vset /object/'+str(i)+'/color 255 0 0')
-    print('set mask color: ',set_mask_color)
+#    print('set mask color: ',set_mask_color)
 #    print('visible actor: ',i,'\t',show)
     
 #    print("\nJOB_START")
     pic_num=1
+    Labels='Labels'
+#    num_1='00'
+#    print(str(num_1))
 #    text_num=1
     
 #    creating directory to save present actor's captured image. here at firts create the folder written inside the inverted comma
 #    for example here it is  F:/unreal_cv_documentation/my_dir/
     
-    dirName='F:/unreal_cv_documentation/my_dir/'+str(i)+'/'
-    my_dir= 'F:/unreal_cv_documentation/my_dir/'+str(i)
+#    dirName=r'F:/unreal_cv_documentation/my_dir/'+str(num_1)+str(object_class)+'/'+str(i)+'/'
+    dirName_RGB='F:/unreal_cv_documentation/my_dir/'+str(viewmode_1)+'/'+'00'+str(object_class)+'/'
+    dirName_MASK='F:/unreal_cv_documentation/my_dir/'+str(viewmode_2)+'/'+'00'+str(object_class)+'/'
+    dirName_CROP='F:/unreal_cv_documentation/my_dir/'+str(viewmode_crop)+'/'+'00'+str(object_class)+'/'
+    dirName_TEXT_FILE='F:/unreal_cv_documentation/my_dir/'+str(Labels)+'/'+'00'+str(object_class)+'/'
+#    my_dir= 'F:/unreal_cv_documentation/my_dir/'+str(i)
 #    print(dirName)
+    
+#    os.makedirs(dirName_RGB)
+#    os.makedirs(dirName_MASK)
+#    os.makedirs(dirName_CROP)
+#    os.makedirs(dirName_TEXT_FILE)
 
-    if not os.path.exists(dirName):
-        os.mkdir(dirName)
-#        print("Directory " , dirName ,  " Created ")
+    if not os.path.exists(dirName_RGB and dirName_MASK and dirName_CROP and dirName_TEXT_FILE):
+        print('hfhrhhrhrhr')
+        os.makedirs(dirName_RGB)
+        os.makedirs(dirName_MASK)
+        os.makedirs(dirName_CROP)
+        os.makedirs(dirName_TEXT_FILE)
+        print("Directory " , dirName_RGB,  " Created ")
+        print("Directory " , dirName_MASK ,  " Created ")
+        print("Directory " , dirName_CROP ,  " Created ")
+        print("Directory " , dirName_TEXT_FILE ,  " Created ")
     else:
-        shutil.rmtree(my_dir,ignore_errors=True)
-#        print('deleted old folder')
-        os.mkdir(dirName)
+        pass
+#        shutil.rmtree(my_dir,ignore_errors=True)
+##        print('deleted old folder')
+#        os.mkdir(dirName)
 #        print('created new folder')
 #        print("Directory " , dirName ,  " already exists")
         
@@ -223,7 +223,7 @@ for i in actor_dict:
             centre_y=actor_location_array[1]      #centre of the object with respect to y-axis
             centre_z=actor_location_array[2]      #centre of the object with respect to z-axis
             radius= actor_dict[i][-1]
-            object_class=actor_dict[i][-2]
+#            object_class=actor_dict[i][-2]
 #            print('here object_class: ',object_class,' and type: ',type(object_class))
             
 #            Formula to find out the different points of x,y,z coordinates on the surface of a sphere is given below
@@ -242,11 +242,11 @@ for i in actor_dict:
             normal_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)
             name_crop=str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)
             
-            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName)+str(lit_name)+'')
-            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName)+str(mask_name)+'')
-            #res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName)+str(normal_name)+'')
+            res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName_RGB)+str(lit_name)+'')
+            res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName_MASK)+str(mask_name)+'')
+            #res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName_NORMAL)+str(normal_name)+'')
             #do_annotation(dirName,mask_name,lit_name,object_class)
-            do_crop(path_of_image=dirName,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type)
+            do_crop(path_of_RGB=dirName_RGB,path_of_MASK=dirName_MASK,path_of_CROP=dirName_CROP,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type,class_number=object_class, path_of_TEXT=dirName_TEXT_FILE)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
