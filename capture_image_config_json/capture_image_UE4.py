@@ -28,8 +28,8 @@ import shutil
 import cv2
 crop=0
 
-hide_Floor=client.request('vset /object/Floor/hide')
-hide_Floor_14=client.request('vset /object/Floor_14/hide')
+#hide_Floor=client.request('vset /object/Floor/hide')
+#hide_Floor_14=client.request('vset /object/Floor_14/hide')
 
 def do_annotation(path_of_text_file,split_lit_image_name_0,x_1,y_1,x_2,y_2,class_number):
     
@@ -87,15 +87,6 @@ def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name
         y_2=y+h
         do_annotation(path_of_TEXT,split_lit_image_name_0,x_1,y_1,x_2,y_2,class_number)
         
-#        f = open(path_of_image+str(split_lit_image_name[0])+'.txt', 'w')
-#        f.write('00'+str(class_number)+"\n")
-#        f.write(str(x)+' ')
-#        f.write(str(y)+' ')
-#        f.write(str(x+w)+' ')
-#        f.write(str(y+h)+' ')
-#        f.close()
-#        
-#        print('Pre Annotation File has made !!')
     else:
         print('here length is: ',len(contours))
         print('-----NO Crop has done. No text file has made-----')
@@ -272,5 +263,5 @@ print("\tJOB_DONE")
 for i in actor_dict:
     show_again=client.request('vset /object/'+str(i)+'/show')
 #    print('NOW visible actor: ',i,'\t',show_again)
-show_Floor=client.request('vset /object/Floor/show')
-show_Floor_14=client.request('vset /object/Floor_14/show')
+#show_Floor=client.request('vset /object/Floor/show')
+#show_Floor_14=client.request('vset /object/Floor_14/show')
