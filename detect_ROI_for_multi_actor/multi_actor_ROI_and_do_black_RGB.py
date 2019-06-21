@@ -9,6 +9,7 @@ mask_im = 'F:/unreal_cv_documentation/detect_ROI_for_multi_actor/image_test/mask
 
 img = cv2.imread(mask_im)
 rgb_img = cv2.imread(lit)
+test_copy_rgb = copy.copy(rgb_img)
 img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 ## Gen lower mask (0-5) and upper mask (175-180) of RED
@@ -29,7 +30,7 @@ for t in range (0,3,1):
         print('length is: ',len(contours))
         cnt = contours[t]
         x,y,w,h = cv2.boundingRect(cnt)
-        roi_rgb_image=cv2.rectangle(rgb_img,(x-1,y-1),(x+w+1,y+h+1),(0,255,0),1)
+        roi_rgb_image=cv2.rectangle(rgb_img,(x,y),(x+w,y+h),(0,255,0),1)
         print('info of ',t,' contour ',x,',',y,',',x+w,',',y+h)
         x=x
         y=y
@@ -45,7 +46,7 @@ for t in range (0,3,1):
         f.write(str(y_1)+' ')
         f.write("\n")
         
-black_rgb = cv2.bitwise_and(roi_rgb_image, roi_rgb_image, mask=mask)
+black_rgb = cv2.bitwise_and(test_copy_rgb, test_copy_rgb, mask=mask)
 
 # target = test_rgb
 roi_black_rgb = copy.copy(black_rgb)
@@ -57,7 +58,7 @@ for i in roi_list:
     x_w_new = i[2]
     y_h_new = i[3]
     
-    roi_black_rgb = cv2.rectangle(roi_black_rgb,(x_new-1,y_new-1),(x_w_new+1,y_h_new+1),(0,255,0),1)
+    roi_black_rgb = cv2.rectangle(roi_black_rgb,(x_new,y_new),(x_w_new,y_h_new),(0,255,0),1)
 
 
 f.close()
@@ -69,9 +70,9 @@ cv2.imshow('roi_rgb_image', roi_rgb_image)
 cv2.imshow("black_rgb", black_rgb)
 cv2.imshow("roi_black_rgb", roi_black_rgb)
 
-#cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/roi_rgb.png',roi_rgb_image)
-#cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/black_rgb.png',black_rgb)
-#cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/roi_black_rgb.png',roi_black_rgb)
+cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/roi_rgb_new.png',roi_rgb_image)
+cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/black_rgb_new.png',black_rgb)
+cv2.imwrite('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/roi_black_rgb_new.png',roi_black_rgb)
 
 
 
