@@ -18,9 +18,6 @@ mask2 = cv2.inRange(img_hsv, (175,50,20), (180,255,255))
 ## Merge the mask and crop the red regions
 mask = cv2.bitwise_or(mask1, mask2 )
 croped = cv2.bitwise_and(img, img, mask=mask)
-f = open('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/image_test/ROI.txt', 'a')
-f = open('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/image_test/ROI.txt', 'r+')
-f.truncate(0)
 
 roi_list = []
 
@@ -40,12 +37,6 @@ for t in range (0,3,1):
         roi_point = [x,y,x_1,y_1]
         roi_list.append(roi_point)
         
-        f.write(str(x)+' ')
-        f.write(str(y)+' ')
-        f.write(str(x_1)+' ')
-        f.write(str(y_1)+' ')
-        f.write("\n")
-        
 black_rgb = cv2.bitwise_and(test_copy_rgb, test_copy_rgb, mask=mask)
 
 # target = test_rgb
@@ -61,7 +52,21 @@ for i in roi_list:
     roi_black_rgb = cv2.rectangle(roi_black_rgb,(x_new,y_new),(x_w_new,y_h_new),(0,255,0),1)
 
 
+# writing roi info from list to a text file
+
+f = open('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/ROI_test.txt', 'a')
+f = open('F:/unreal_cv_documentation/detect_ROI_for_multi_actor/final_image/ROI_test.txt', 'r+')
+f.truncate(0)
+
+for i in roi_list:
+    ww = str(i)
+    ww=ww.replace('[','')
+    ww=ww.replace(']','')
+    ww=ww.replace(',','')
+    f.write(ww)
+    f.write("\n")
 f.close()
+
 
 ## Display
 # cv2.imshow("mask", mask)
