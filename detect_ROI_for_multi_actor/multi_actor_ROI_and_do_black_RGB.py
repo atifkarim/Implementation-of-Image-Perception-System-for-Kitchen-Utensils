@@ -3,6 +3,9 @@ import cv2
 import os
 import copy
 
+actor_array = ['SM_DenkMitEdelstahlReinigerSpray_18','SM_CalgonitFinishKlarspueler_3','SM_CalgonitFinishVorratspack_12']
+actor_array = np.array(actor_array)
+
 lit = 'F:/unreal_cv_documentation/detect_ROI_for_multi_actor/image_test/lit_1.png'
 mask_im = 'F:/unreal_cv_documentation/detect_ROI_for_multi_actor/image_test/mask_1.png'
 
@@ -22,7 +25,7 @@ croped = cv2.bitwise_and(img, img, mask=mask)
 roi_list = []
 
 image, contours, hierarchy =  cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-for t in range (0,3,1):
+for t in range (0,len(actor_array),1):
     if len(contours)>0:
         print('length is: ',len(contours))
         cnt = contours[t]
