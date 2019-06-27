@@ -1,7 +1,10 @@
 # In this code the approach of finding ROI of different coloured object using MASK image and LIT(RGB) image has depicted.
-# To perform the operation of this code at first you have to follow this link and run the code. The code of this link will take the image from UE4 using UnrealCV and
+# To perform the operation of this code at first you have to follow
+# this link(https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/detect_ROI_for_multi_actor/detect_roi_while_every_actor_has_different_color_in_mask.ipynb)
+# and run the code. The code of this link will take the image from UE4 using UnrealCV and
 # make a text file which will contain the RGBA info of object(from MASK image it will take it). It is important to fetch the RGB info of every actor.
 # Keep in mind that UnealCV generates the color info in RGB format while OpenCV deals with BGR format.
+# Now you ready to detect ROI of different color of actor.
 
 #importing library
 import cv2
