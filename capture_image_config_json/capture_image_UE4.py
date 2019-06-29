@@ -1,9 +1,3 @@
-# check
-# https://stackoverflow.com/questions/36098241/using-findcontours-in-python-with-opencv
-# https://stackoverflow.com/questions/36160638/opencv-contours-in-python-how-to-solve-list-index-out-of-range?noredirect=1&lq=1
-#https://stackoverflow.com/questions/31475634/drawcontours-not-working-opencv-python
-
-
 import time; print(time.strftime("The last update of this file: %Y-%m-%d %H:%M:%S", time.gmtime()))
 import sys, time
 # Establish connection with the UE4 game
@@ -26,6 +20,7 @@ import math
 import shutil
 #import glob
 import cv2
+import copy
 crop=0
 
 #hide_Floor=client.request('vset /object/Floor/hide')
@@ -47,7 +42,7 @@ def do_annotation(path_of_text_file,split_lit_image_name_0,x_1,y_1,x_2,y_2,class
 
 
 
-def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name,crop_image_type,class_number,path_of_TEXT):
+def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name,crop_image_type,class_number,path_of_TEXT,red,green,blue):
 #    print("function_start!!!!!!!!!!!!")
     global crop
     split_lit_image_name=lit_image_name.split(".")
@@ -58,12 +53,25 @@ def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name
     mask_image=path_of_MASK+mask_image_name
     read_lit_image=cv2.imread(lit_image)
     read_mask_image=cv2.imread(mask_image)
+    img = np.zeros((read_mask_image.shape[0],read_mask_image.shape[1],read_mask_image.shape[2]), np.uint8)
+    test_copy_img = copy.copy(img)
+    
+    for rows in range (0, read_mask_image.shape[0]):
+        for cols in range(0, read_mask_image.shape[1]):
+            if read_mask_image[rows][cols][0]==blue and read_mask_image[rows][cols][1]==green and read_mask_image[rows][cols][2]==red:
+                test_copy_img[rows][cols] = 255 #for white color 255
+                
+    
+    imgray=cv2.cvtColor(test_copy_img,cv2.COLOR_BGR2GRAY)
+    ret,thresh = cv2.threshold(imgray,127,255,0)
+    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
     
    # image_mask_copy = read_mask_image.copy()
-    imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2GRAY)
-    ret,thresh = cv2.threshold(imgray,127,255,1)
+#    imgray=cv2.cvtColor(read_mask_image,cv2.COLOR_BGR2GRAY)
+#    ret,thresh = cv2.threshold(imgray,127,255,1)
 #    print('Till now OK')
-    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+#    image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     #cv2.drawContours(image_mask_copy,contours,0,(0,255,0))
     
 #    hsv = cv2.cvtColor(read_mask_image, cv2.COLOR_BGR2HSV)
@@ -94,7 +102,7 @@ def do_crop(path_of_RGB,path_of_MASK,path_of_CROP,lit_image_name,mask_image_name
 
 
 #config file is opening and fetching data
-with open('config_file_capture_image.json', 'r') as f:
+with open('test_config.json', 'r') as f:
     config = json.load(f)
 
 polar_angle_start= config['DEFAULT']['polar_angle_start']
@@ -125,9 +133,13 @@ for i in config['actor']:
     actor_dict[i].append(azimuthal_angle_end)
     actor_dict[i].append(config['actor'][i]['class'])
     actor_dict[i].append(config['actor'][i]['radius'])
-#print(actor_dict)
+print('actor_dict: ',actor_dict)
 
+ind= {k_1:i_1 for i_1,k_1 in enumerate(actor_dict.keys())}
 
+for u_1 in actor_dict:
+    print('index of ',u_1,' is: ',ind[u_1])
+    
 #print('type: ',type(actor_list),'\n list: ',actor_list)
 #res_list=client.request('vget /objects')
 #print('res_type: ',type(res_list),'res_list: ',res_list)
@@ -135,18 +147,109 @@ for i in config['actor']:
 # Observing spherical movement of the camera around the object
 # the area cover with polar_angle/elevation angle is 'Latitude' region. From north to South or vice versa
 # the area cover with azimuthal angle is 'Longitude' region. From west to east or vice versa
+store=[]
+print('my type is: ', type(store))
+   
+for i in actor_dict:
+    RGB_info = 'RGB_info'
+    sub_dir = str(RGB_info)
+    dirName_RGB_info = 'F:/unreal_cv_documentation/my_dir/'+sub_dir+'/'
+    
+    if not os.path.exists(dirName_RGB_info):
+        
+        os.mkdir(dirName_RGB_info)
+        print('Directory ',dirName_RGB_info,' created')
+    else:
+        pass
+    f = open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt', 'a')
+    f = open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt', 'r+')
+    f.truncate(0)
+    get_mask_color= client.request('vget /object/'+str(i)+'/color')
+    print('mask color: ',get_mask_color)
+    ww = str(get_mask_color)
+    ww=ww.replace('R','')
+    ww=ww.replace('G','')
+    ww=ww.replace('B','')
+    ww=ww.replace('A','')
+    ww=ww.replace('=','')
+    ww=ww.replace('(','')
+    ww=ww.replace(')','')
+    ww=ww.replace(',',' ')
+    f.write(ww)
+    f.write("\n")
+    f.close()
+    
+for i in actor_dict:   
+    with open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt') as f1:
+        all_lines = f1.readlines()
+        for line in all_lines:
+            line_split = line.split('\n')
+            m_1 = line_split[0].split(' ')
+            print('DONE')
+            store.append(m_1)
+store=np.array(store,dtype=int)
 
+r,g,b,a=[store[:,d] for d in range(len(store[0]))]
+print(r,'\t',g,'\t',b,'\t',a)
+print(r.shape,'\t',g.shape,'\t',b.shape,'\t',a.shape)
 for i in actor_dict:
 #    print('i is: ',i)
     hide=client.request('vset /object/'+str(i)+'/hide')
 #    print('hidden actor: ',i,'\t',hide)
-
+#number_1 = 0
 for i in actor_dict:
+    r_1 = r[ind[i]]
+    g_1 = g[ind[i]]
+    b_1 = b[ind[i]]
+    
+#    number_1 +=1
+    print(r_1,'\t',g_1,'\t',b_1)
     object_class=actor_dict[i][-2]
     
     print('Working with ',i,' whose class is ',object_class,' has started')
     show=client.request('vset /object/'+str(i)+'/show')
-    set_mask_color= client.request('vset /object/'+str(i)+'/color 255 0 0')
+    
+#    RGB_info = 'RGB_info'
+#    sub_dir = str(RGB_info)
+#    dirName_RGB_info = 'F:/unreal_cv_documentation/my_dir/'+sub_dir+'/'
+#    
+#    if not os.path.exists(dirName_RGB_info):
+#        
+#        os.mkdir(dirName_RGB_info)
+#        print('Directory ',dirName_RGB_info,' created')
+#    else:
+#        pass
+#    f = open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt', 'a')
+#    f = open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt', 'r+')
+#    f.truncate(0)
+#    get_mask_color= client.request('vget /object/'+str(i)+'/color')
+#    print(get_mask_color)
+#    ww = str(get_mask_color)
+#    ww=ww.replace('R','')
+#    ww=ww.replace('G','')
+#    ww=ww.replace('B','')
+#    ww=ww.replace('A','')
+#    ww=ww.replace('=','')
+#    ww=ww.replace('(','')
+#    ww=ww.replace(')','')
+#    ww=ww.replace(',',' ')
+#    f.write(ww)
+#    f.write("\n")
+#    f.close()
+#    
+#    store=[]
+#    with open(str(dirName_RGB_info)+'color_info_'+str(i)+'.txt') as f1:
+#        a=f1.readlines()
+#        for c in a:
+#            k=c.split('\n')
+#            m=k[0].split(' ')
+#            store.append(m)
+#    store=np.array(store,dtype=int)
+#
+#    r,g,b,a=[store[:,d] for d in range(len(store[0]))]
+#    print(r,'\t',g,'\t',b,'\t',a)
+    
+#    set_mask_color= client.request('vset /object/'+str(i)+'/color 255 0 0')
 #    print('set mask color: ',set_mask_color)
 #    print('visible actor: ',i,'\t',show)
     
@@ -174,7 +277,6 @@ for i in actor_dict:
 #    os.makedirs(dirName_TEXT_FILE)
 
     if not os.path.exists(dirName_RGB and dirName_MASK and dirName_CROP and dirName_TEXT_FILE):
-        print('hfhrhhrhrhr')
         os.makedirs(dirName_RGB)
         os.makedirs(dirName_MASK)
         os.makedirs(dirName_CROP)
@@ -194,10 +296,10 @@ for i in actor_dict:
 #    getting the present actor's location
     
     actor_location=client.request('vget /object/'+str(i)+'/location')
-#    print(actor_location)
+    print(actor_location)
     actor_location = actor_location.split(" ") #splitted the location to append in an array
     actor_location_array=np.array(actor_location)
-#    print(actor_location_array)
+    print(actor_location_array)
     actor_location_array = actor_location_array.astype(np.float) # make the string type to float type to use in the calculation
 
 #    calculation process starts from here
@@ -237,7 +339,7 @@ for i in actor_dict:
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName_MASK)+str(mask_name)+'')
             #res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName_NORMAL)+str(normal_name)+'')
             #do_annotation(dirName,mask_name,lit_name,object_class)
-            do_crop(path_of_RGB=dirName_RGB,path_of_MASK=dirName_MASK,path_of_CROP=dirName_CROP,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type,class_number=object_class, path_of_TEXT=dirName_TEXT_FILE)
+            do_crop(path_of_RGB=dirName_RGB,path_of_MASK=dirName_MASK,path_of_CROP=dirName_CROP,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type,class_number=object_class, path_of_TEXT=dirName_TEXT_FILE,red=r_1,green=g_1,blue=b_1)
             
 #             if you want to use address info from config file then please use the following line
 #            res = client.request('vget /camera/0/'+str(camera_view_type)+str(" ")+str(address)+str(pic_num)+'.'+str(image_type)+'')
