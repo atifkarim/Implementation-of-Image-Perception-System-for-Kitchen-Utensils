@@ -1,5 +1,15 @@
-# unreal_cv_image_manipulation
+# UnrealCV image_manipulation
 The goal of this repo is to use Unreal Engine 4(UE4) for making dataset for Robotic perception system. For this purpose here I have introduced the combination of UE4 and UnrealCV.
+
+# Requirements
+
+Tested on Unreal Engine v4.16, 4.19
+
+UnrealCV(fast branch)
+
+Python 3.6
+
+Windows 10, 64 bit
 
 
 # code for capturing image as well as making dataset for YOLO and Keras
