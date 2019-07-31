@@ -1,3 +1,9 @@
+#This code will work if the color of the desired actor in the mask image is RED.
+# Why RED?? Because, during creation of the mask image I have set the color of the desired actor RED.
+# SO, if you set another color then also it would be possible but at that time in this code you have to change the color info.
+
+
+
 import numpy as np
 import cv2
 import os
