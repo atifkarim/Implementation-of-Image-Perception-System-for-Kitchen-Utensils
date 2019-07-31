@@ -33,6 +33,7 @@ import shutil
 #import glob
 import cv2
 import copy
+import time
 crop=0
 
 # =============================================================================
@@ -113,10 +114,12 @@ azimuthal_angle_end= config['DEFAULT']['azimuthal_angle_end']
 azimuthal_angle_step= config['DEFAULT']['azimuthal_angle_step']
 #print('pola_step: ',polar_angle_step,'\t azi step: ',azimuthal_angle_step)
 viewmode_1= config['DEFAULT']['viewmode_1']
+
+print(type(viewmode_1))
 viewmode_2= config['DEFAULT']['viewmode_2']
 viewmode_3= config['DEFAULT']['viewmode_3']
 viewmode_crop= config['DEFAULT']['viewmode_crop']
-#address= config['DEFAULT']['address']
+address= config['DEFAULT']['address']
 image_type= config['DEFAULT']['image_type']
 
 #actor_list= config['DEFAULT']['actor_list']
@@ -150,6 +153,23 @@ for u_1 in actor_dict:
 
 
 # =============================================================================
+# creating main folder to store all of the images and text file
+# =============================================================================
+
+current_directory = os.getcwd()
+#print(current_directory)
+# final_directory = os.path.join(current_directory, r'my_folder')
+final_directory = current_directory+'/'+str(address)
+if not os.path.exists(final_directory):
+    os.makedirs(final_directory)
+    print('created : ', final_directory)
+else:
+    shutil.rmtree(final_directory,ignore_errors= True)
+    os.makedirs(final_directory)
+    print('after deletion old one created new : ', final_directory)
+
+
+# =============================================================================
 # creating text file to contatin RGB info of actor
 # =============================================================================
 store=[]
@@ -157,7 +177,8 @@ store=[]
 for i in actor_dict:
     RGB_info = 'RGB_info'
     sub_dir = str(RGB_info)
-    dirName_RGB_info = 'F:/unreal_cv_documentation/my_dir/'+sub_dir+'/'
+    dirName_RGB_info = final_directory+'/'+sub_dir+'/'
+#    dirName_RGB_info = 'F:/unreal_cv_documentation/my_dir/'+sub_dir+'/'
     
     if not os.path.exists(dirName_RGB_info):
         
@@ -226,12 +247,13 @@ for i in actor_dict:
 # =============================================================================
     
 #    dirName=r'F:/unreal_cv_documentation/my_dir/'+str(num_1)+str(object_class)+'/'+str(i)+'/'
-    dirName_RGB='F:/unreal_cv_documentation/my_dir/'+str(viewmode_1)+'/'+'00'+str(object_class)+'/'
-    dirName_MASK='F:/unreal_cv_documentation/my_dir/'+str(viewmode_2)+'/'+'00'+str(object_class)+'/'
-    dirName_CROP='F:/unreal_cv_documentation/my_dir/'+str(viewmode_crop)+'/'+'00'+str(object_class)+'/'
-    dirName_TEXT_FILE='F:/unreal_cv_documentation/my_dir/'+str(Labels)+'/'+'00'+str(object_class)+'/'
+    dirName_RGB= final_directory+'/'+str(viewmode_1)+'/'+'00'+str(object_class)+'/'
+    dirName_MASK=final_directory+'/'+str(viewmode_2)+'/'+'00'+str(object_class)+'/'
+    dirName_CROP=final_directory+'/'+str(viewmode_crop)+'/'+'00'+str(object_class)+'/'
+    dirName_TEXT_FILE=final_directory+'/'+str(Labels)+'/'+'00'+str(object_class)+'/'
 
     if not os.path.exists(dirName_RGB and dirName_MASK and dirName_CROP and dirName_TEXT_FILE):
+        pass
         os.makedirs(dirName_RGB)
         os.makedirs(dirName_MASK)
         os.makedirs(dirName_CROP)
@@ -294,15 +316,16 @@ for i in actor_dict:
             res_location=client.request('vset /camera/0/location '+str(x)+' '+str(y)+' '+str(z)+'')
             yaw+=1 # yaw value is increasing to look at the object
             
-            lit_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_1)+'.'+str(image_type)
-            mask_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_2)+'.'+str(image_type)
+            lit_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(radius)+'_'+str(viewmode_1)+'.'+str(image_type)
+            mask_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(radius)+'_'+str(viewmode_2)+'.'+str(image_type)
             normal_name=str(pic_num)+"_"+str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)+'_'+str(viewmode_3)+'.'+str(image_type)
             name_crop=str(i)+'_'+str(azimuthal_angle)+"_"+str(polar_angle)
+#            time.sleep(0.200)
             
             res_lit = client.request('vget /camera/0/'+str(viewmode_1)+str(" ")+str(dirName_RGB)+str(lit_name)+'')
             res_mask = client.request('vget /camera/0/'+str(viewmode_2)+str(" ")+str(dirName_MASK)+str(mask_name)+'')
             #res_normal = client.request('vget /camera/0/'+str(viewmode_3)+str(" ")+str(dirName_NORMAL)+str(normal_name)+'')
-            #do_annotation(dirName,mask_name,lit_name,object_class)
+#            do_annotation(dirName,mask_name,lit_name,object_class)
             do_crop(path_of_RGB=dirName_RGB,path_of_MASK=dirName_MASK,path_of_CROP=dirName_CROP,lit_image_name=lit_name,mask_image_name=mask_name,crop_image_type=image_type,class_number=object_class, path_of_TEXT=dirName_TEXT_FILE,red=r_1,green=g_1,blue=b_1)
             
 #             if you want to use address info from config file then please use the following line
