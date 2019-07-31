@@ -10,7 +10,7 @@
 	"viewmode_2":"object_mask",
 	"viewmode_3":"normal",
 	"viewmode_crop":"crop",
-	"address":"F:/save_image_ai/object_subtraction_for_UE4/image_AI/rgb_table_4_21/config_json/",
+	"address":"image_container",
 	"image_type":"png",
 	"actor_list":"vget /objects"
 	
