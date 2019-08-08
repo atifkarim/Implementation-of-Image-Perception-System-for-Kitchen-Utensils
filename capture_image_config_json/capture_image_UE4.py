@@ -173,6 +173,7 @@ else:
 # creating text file to contatin RGB info of actor
 # =============================================================================
 store=[]
+print('here list:',store)
    
 for i in actor_dict:
     RGB_info = 'RGB_info'
@@ -215,7 +216,9 @@ for i in actor_dict:
             line_split = line.split('\n')
             m_1 = line_split[0].split(' ')
             store.append(m_1)
+print('---------FINISH-----------')
 store=np.array(store,dtype=int)
+print('store: ',store)
 
 r,g,b,a=[store[:,d] for d in range(len(store[0]))]
 #print(r,'\t',g,'\t',b,'\t',a)
