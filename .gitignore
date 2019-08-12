@@ -31,7 +31,4 @@ detect_ROI_for_multi_actor/new_image
 capture_image_config_json/image_container/*
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
-<<<<<<< HEAD
 
-=======
->>>>>>> 3e86ff04bb2a22198f26deee46008791039e676e
