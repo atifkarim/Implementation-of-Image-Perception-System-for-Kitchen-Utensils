@@ -29,6 +29,6 @@ detect_ROI_for_multi_actor/image_test
 detect_ROI_for_multi_actor/unreal_test
 detect_ROI_for_multi_actor/new_image
 capture_image_config_json/image_container/*
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
+unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/.ipynb_checkpoints
+unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/*/.ipynb_checkpoints/*
 
