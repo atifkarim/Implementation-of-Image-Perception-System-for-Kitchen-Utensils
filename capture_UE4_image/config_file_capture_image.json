@@ -1,0 +1,103 @@
+{
+  "DEFAULT": {
+    "polar_angle_start": 90,
+	"polar_angle_end": 0,
+	"polar_angle_step":-5,
+	"azimuthal_angle_start":0,
+	"azimuthal_angle_end":1,
+	"azimuthal_angle_step":1,
+	"viewmode_1":"lit",
+	"viewmode_2":"object_mask",
+	"viewmode_3":"normal",
+	"viewmode_crop":"crop",
+	"address":"image_container",
+	"image_type":"png",
+	"actor_list":"vget /objects"
+	
+  },
+  
+  "actor":
+  {
+  
+  "SM_CalgonitFinishKlarspueler_2": {
+    "radius":300,
+    "class":1},
+  
+  "SM_CalgonitFinishMaschinenpfleger_5":{
+  "radius":300,
+  "class":2},
+	
+	"SM_CalgonitFinish_2": {
+    "radius":300,
+    "class":3},
+    
+    "SM_DenkMitGeschirrReiniger_2": {
+    "radius":300,
+    "class":4},
+	
+	"SM_DenkMitGeschirrReinigerClassic_5":{
+  "radius":300,
+  "class":5},
+  
+  "SM_DenkMitGeschirrReinigerNature_11":{
+  "radius":300,
+  "class":6},
+  
+  "SM_DenkMitHygieneAllzweckreiniger_14":{
+  "radius":300,
+  "class":7},
+  
+  "SM_DenkMitMaschinenpfleger_17":{
+  "radius":300,
+  "class":8},
+  
+  "SM_DenkMitSpezialsalz_20":{
+  "radius":300,
+  "class":9},
+  
+  "SM_SomatClassic_2":{
+  "radius":300,
+  "class":10},
+  
+  "SM_DenkMitGeschirrReinigerEvo_8":{
+  "radius":300,
+  "class":11},
+  
+  "SM_DomestosKraftUniversalreiniger_23":{
+  "radius":300,
+  "class":12},
+  
+  "SM_HeitmannReineCitronenSaeure_26":{
+  "radius":300,
+  "class":13},
+  
+  "SM_HeitmannReineCitronensaeure2_29":{
+  "radius":300,
+  "class":14},
+  
+  "SM_SomatExtraAllIn1_32":{
+  "radius":300,
+  "class":15},
+  
+  "SM_CalgonitFinishSpezialSalz_38":{
+  "radius":300,
+  "class":16},
+  
+  "SM_CalgonitFinishVorratspack_41":{
+  "radius":300,
+  "class":17},
+  
+  "SM_DenkMitEdelstahlReinigerSpray_44":{
+  "radius":300,
+  "class":18},
+  
+  "SM_DenkMitEdelstahlreiniger_47":{
+  "radius":300,
+  "class":19},
+  
+  "SM_DenkMitEntkalker_50":{
+  "radius":300,
+  "class":20}
+    
+  }
+}
