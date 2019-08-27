@@ -11,10 +11,10 @@ unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_Table
 unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_crop_3_object
 unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/test_image_UE4.py
 unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/train_image_UE4.py
-capture_image_config_json/config.json
-capture_image_config_json/config_file.json
-capture_image_config_json/test_config.json
-capture_image_config_json/New Text Document.py
+capture_UE4_image/config.json
+capture_UE4_image/config_file.json
+capture_UE4_image/test_config.json
+capture_UE4_image/New Text Document.py
 tool_box_gui.py
 sample_gui.py
 untitled0.py
@@ -34,4 +34,5 @@ unreal_cv_image_processing_for_ML/object_subtraction_for_UE4/*/.ipynb_checkpoint
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 **/.ipynb_checkpoints
+classification_UE4_image/.ipynb_checkpoints
 
