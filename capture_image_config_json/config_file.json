@@ -1,0 +1,7 @@
+{
+  "DEFAULT": {
+    
+    "MAX_IMAGE_SIZE": 5242880,
+	"MAX_IMAGE_SIZE_1": 3200
+  }
+}
