@@ -167,7 +167,7 @@ def lr_schedule(epoch):
     return lr*(0.1**int(epoch/10))
 
 
-nb_epoch = 100
+nb_epoch = 30
 batch_size = 32
 do_train_model = model_augmentation.fit_generator(datagen.flow(X_train, Y_train, batch_size=batch_size),
                             steps_per_epoch=X_train.shape[0],
