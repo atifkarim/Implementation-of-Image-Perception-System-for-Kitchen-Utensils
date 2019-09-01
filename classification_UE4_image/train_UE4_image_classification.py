@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# # In this notebook code for image preprocessing, raining and testing(image by image and overall accuracy) of UE4 image will be developed
+
+# In[1]:
 
 
 import numpy as np
@@ -29,17 +31,19 @@ from keras import backend as K
 K.set_image_data_format('channels_first')
 
 from matplotlib import pyplot as plt
-#get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 from matplotlib.pylab import rcParams
 
 #import keras
 
 NUM_CLASSES = 16 # change it with respect to the desired class
-IMG_SIZE = 150 # change it if it desired
+IMG_SIZE = 48 # change it if it desired
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 
 
-# In[3]:
+# # Image preprocessing function
+
+# In[2]:
 
 
 def preprocess_img(img):
@@ -67,12 +71,12 @@ def get_class(img_path):
 #     return str(img_path.split('/')[-2]) # returning the folder name. If use -1 that means image name. consider the img_path.
 
 
-# In[4]:
+# In[12]:
 
 
 imgs = []
 labels = []
-root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
+root_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/'
 #path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
@@ -94,7 +98,7 @@ for img_path in all_img_paths:
         pass
 
 
-# In[5]:
+# In[13]:
 
 
 X = np.array(imgs, dtype='float32') #Keeping the image as an array
@@ -106,56 +110,40 @@ print('X shape: ', X.shape,' type: ',type(X))
 print('Y shape: ', Y.shape,' type: ',type(Y))
 
 
-# In[6]:
+# # Model declaration
 
-
-from keras.applications import InceptionResNetV2
-
-conv_base = InceptionResNetV2(weights='/home/atif/machine_learning_stuff/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(3,150,150))
-
-
-# In[7]:
-
-
-conv_base.summary()
-
-
-# In[ ]:
+# In[14]:
 
 
 def cnn_model():
     model = Sequential()
-    
-    model.add(conv_base)
+
+    model.add(Conv2D(32, (3, 3), padding='same',
+                     input_shape=(3, IMG_SIZE, IMG_SIZE),
+                     activation='relu'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.2))
+
+    model.add(Conv2D(128, (3, 3), padding='same',
+                     activation='relu'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.2))
+
+    model.add(Conv2D(128, (3, 3), padding='same',
+                     activation='relu'))
+    model.add(Conv2D(128, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.2))
+
     model.add(Flatten())
     model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(NUM_CLASSES, activation='softmax'))
     return model
 
-
-# In[ ]:
-
-
 model = cnn_model()
-
-
-# In[ ]:
-
-
-model.summary()
-
-
-# In[ ]:
-
-
-print('Number of trainable weights before freezing the conv base:', len(model.trainable_weights))
-conv_base.trainable = False
-print('Number of trainable weights after freezing the conv base:', len(model.trainable_weights))
-
-
-# In[ ]:
-
 
 lr = 0.01
 sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
@@ -164,13 +152,19 @@ model.compile(loss='categorical_crossentropy',
           metrics=['accuracy'])
 
 
-# In[ ]:
+# In[15]:
+
+
+model.summary()
+
+
+# In[16]:
 
 
 path = '/home/atif/machine_learning_stuff/model_file_keras/'
 
 
-# In[ ]:
+# In[11]:
 
 
 def lr_schedule(epoch):
@@ -183,4 +177,4 @@ do_train_model=model.fit(X, Y,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'transfer_learning_1_sep_30_epoch.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'1_sep_ep_30_general.h5', save_best_only=True)])
