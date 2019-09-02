@@ -116,6 +116,12 @@ conv_base = InceptionResNetV2(weights='/home/atif/machine_learning_stuff/incepti
 
 # In[7]:
 
+for layer in conv_base.layers[:-4]:
+    layer.trainable = False
+# Check the trainable status of the individual layers
+for layer in conv_base.layers:
+    print(layer, layer.trainable)
+
 
 conv_base.summary()
 
@@ -149,9 +155,9 @@ model.summary()
 # In[ ]:
 
 
-print('Number of trainable weights before freezing the conv base:', len(model.trainable_weights))
-conv_base.trainable = False
-print('Number of trainable weights after freezing the conv base:', len(model.trainable_weights))
+#print('Number of trainable weights before freezing the conv base:', len(model.trainable_weights))
+#conv_base.trainable = False
+#print('Number of trainable weights after freezing the conv base:', len(model.trainable_weights))
 
 
 # In[ ]:
@@ -177,10 +183,10 @@ def lr_schedule(epoch):
     return lr * (0.1 ** int(epoch / 10))
 
 batch_size = 32
-epochs = 30
+epochs = 50
 do_train_model=model.fit(X, Y,
           batch_size=batch_size,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'transfer_learning_1_sep_30_epoch.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'inception_resnet_V2_2_sep_50_epoch.h5', save_best_only=True)])
