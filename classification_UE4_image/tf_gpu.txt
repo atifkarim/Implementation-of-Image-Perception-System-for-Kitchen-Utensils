@@ -1,0 +1,49 @@
+installing tensorflow using gpu is a problem that I have faced. So, here following which way I have installed tensorrflow correctly I am writing it down.
+
+
+1/ first of all god to create a virtual environment.
+I am writing here the steps and aso before the nxt point I have given also the link.
+---- check pip is updated or not. if NOT please update it. follow the link I have given below.
+---- python3 -m pip install --user virtualenv (if virtualenv lib is not installled)
+---- python3 -m venv name_of_virtual_env
+---- source ~/name_of_virtual_env/bin/activate (I am assuming that you are creating virtual env in the root folder. This line will activate venv.)
+
+Now you are done. Now the steps to instal library. here, our focus would be to install tf with gpu.
+
+
+link -- https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
+2/ I have followed this link https://github.com/tensorflow/tensorflow/issues/12388#issuecomment-402307127. you can try with your own. maybe one problem will encounter with tf version. I haven't tested
+for other version. I have used 1.8.0
+
+pip uninstall tensorflow
+pip uninstall tensorflow-gpu
+pip install tensorflow-gpu==1.8.0
+
+!!!! you will see that in this answer he has also installed "pip install tensorflow==1.8.0" but I have omitted it. I will check it later is it important or not.
+
+3/  now Keras.
+
+for some reason I have installed a specific version of keras. you can follow it https://github.com/keras-team/keras/issues/5852
+
+pip install keras==2.1.2
+
+But here this time I have got a new error while want to save model in h5 format. Then I have solved that issue by following https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model(bottom)
+
+sudo apt-get install libhdf5-serial-dev
+
+
+to check tf is using gpu or not --- 
+import tensorflow as tf
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+
+
+another way but didn't understand properly ---
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
+
+
+
+to check keras is using gpu or not ---
+from keras import backend as K
+K.tensorflow_backend._get_available_gpus()
