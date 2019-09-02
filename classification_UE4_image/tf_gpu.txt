@@ -6,7 +6,7 @@ nvcc -V
 GPU driver has setup. check with the following command
 nvidia-smi
 
-If YES proceed. Otherwise set it up. (MAYBE follow it -- https://www.pytorials.com/how-to-install-tensorflow-gpu-with-cuda-9-2-for-python-on-ubuntu/)
+If YES proceed. Otherwise set it up. (MAYBE follow it -- https://www.pytorials.com/how-to-install-tensorflow-gpu-with-cuda-9-2-for-python-on-ubuntu/).
 
 
 
@@ -56,3 +56,12 @@ print(device_lib.list_local_devices())
 to check keras is using gpu or not ---
 from keras import backend as K
 K.tensorflow_backend._get_available_gpus()
+
+
+
+
+
+TODO list ----
+1/ use updated version of tf with gpu
+2/ know the importance of using tf without gpu OR is it necessary to use tensorflow with and without gpu installation at the same time
+3/ install KERAS with the updated version
