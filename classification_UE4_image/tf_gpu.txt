@@ -6,7 +6,7 @@ nvcc -V
 GPU driver has setup. check with the following command
 nvidia-smi
 
-If YES proceed. Otherwise set it up.
+If YES proceed. Otherwise set it up. (MAYBE follow it -- https://www.pytorials.com/how-to-install-tensorflow-gpu-with-cuda-9-2-for-python-on-ubuntu/)
 
 
 
