@@ -31,7 +31,7 @@ from keras import backend as K
 K.set_image_data_format('channels_first')
 
 from matplotlib import pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
+#get_ipython().run_line_magic('matplotlib', 'inline')
 from matplotlib.pylab import rcParams
 
 #import keras
@@ -76,7 +76,7 @@ def get_class(img_path):
 
 imgs = []
 labels = []
-root_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/'
+root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
 #path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
@@ -177,4 +177,4 @@ do_train_model=model.fit(X, Y,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'1_sep_ep_30_general.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'general_2_sep_ep_30_epoch.h5', save_best_only=True)])
