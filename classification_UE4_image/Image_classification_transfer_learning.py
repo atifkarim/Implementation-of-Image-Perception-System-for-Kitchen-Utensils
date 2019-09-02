@@ -183,10 +183,10 @@ def lr_schedule(epoch):
     return lr * (0.1 ** int(epoch / 10))
 
 batch_size = 32
-epochs = 50
+epochs = 30
 do_train_model=model.fit(X, Y,
           batch_size=batch_size,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'inception_resnet_V2_2_sep_50_epoch.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'inception_resnet_V2_2_sep_30_epoch.h5', save_best_only=True)])
