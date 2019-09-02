@@ -1,5 +1,14 @@
 installing tensorflow using gpu is a problem that I have faced. So, here following which way I have installed tensorrflow correctly I am writing it down.
 
+before starting this check CUDA,CUDNN has setup. GPU driver has setup. check with the following command
+nvcc -V
+
+GPU driver has setup. check with the following command
+nvidia-smi
+
+If YES proceed. Otherwise set it up.
+
+
 
 1/ first of all god to create a virtual environment.
 I am writing here the steps and aso before the nxt point I have given also the link.
