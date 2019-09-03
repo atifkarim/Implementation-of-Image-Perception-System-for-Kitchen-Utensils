@@ -59,7 +59,7 @@ def get_class(img_path):
 
 
 from keras.models import load_model
-model = load_model('/home/atif/machine_learning_stuff/model_file_keras/transfer_learning_1_sep_30_epoch.h5')
+model = load_model('/home/atif/machine_learning_stuff/model_file_keras/inception_resnet_V2_2_sep_30_epoch.h5')
 
 import pandas as pd
 
