@@ -81,7 +81,7 @@ model.summary()
 
 # # Training. No image augmentation
 
-epoch = 30
+epoch = 20
 saved_model_path = '/home/atif/machine_learning_stuff/unreal_cv_image/unreal_cv_image_manipulation/classification_UE4_image/trained_model/'
 
 
@@ -144,7 +144,7 @@ history = model.fit_generator(
       verbose=1)
 
 # Save the Model
-model.save(saved_model_path+'img_aug.h5')
+model.save(saved_model_path+'vgg16_img_augmentaion_epoch_30.h5')
 
 # Plot the accuracy and loss curves
 acc = history.history['acc']
