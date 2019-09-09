@@ -28,7 +28,7 @@ from matplotlib.pylab import rcParams
 
 #import keras
 
-NUM_CLASSES = 2 # change it with respect to the desired class
+NUM_CLASSES = 16 # change it with respect to the desired class
 IMG_SIZE = 48 # change it if it desired
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 
@@ -61,7 +61,7 @@ def get_class(img_path):
 
 imgs = []
 labels = []
-root_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/'
+root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_reduced/'
 #path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
@@ -174,7 +174,7 @@ do_train_model = model_augmentation.fit_generator(datagen.flow(X_train, Y_train,
                             epochs=nb_epoch,
                             validation_data=(X_val, Y_val),
                             callbacks=[LearningRateScheduler(lr_schedule),
-                                       ModelCheckpoint(path+'model_augmentation_1_epoch_27_aug.h5',save_best_only=True)]
+                                       ModelCheckpoint(path+'model_augmentation_2_epoch_4_sep.h5',save_best_only=True)]
                            )
 
 
