@@ -61,7 +61,7 @@ def get_class(img_path):
 
 imgs = []
 labels = []
-root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_reduced/'
+root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
 #path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
@@ -103,24 +103,31 @@ def cnn_model():
     model.add(Conv2D(32, (3, 3), padding='same',
                      input_shape=(3, IMG_SIZE, IMG_SIZE),
                      activation='relu'))
-    model.add(Conv2D(32, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.2))
-
-    model.add(Conv2D(64, (3, 3), padding='same',
-                     activation='relu'))
     model.add(Conv2D(64, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.2))
-
+    
     model.add(Conv2D(128, (3, 3), padding='same',
+                     input_shape=(3, IMG_SIZE, IMG_SIZE),
                      activation='relu'))
-    model.add(Conv2D(128, (3, 3), activation='relu'))
+    model.add(Conv2D(256, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.2))
+
+    model.add(Conv2D(256, (3, 3), padding='same',
+                     activation='relu'))
+    model.add(Conv2D(256, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.2))
+
+    model.add(Conv2D(512, (3, 3), padding='same',
+                     activation='relu'))
+    model.add(Conv2D(512, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.2))
 
     model.add(Flatten())
-    model.add(Dense(512, activation='relu'))
+    model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(NUM_CLASSES, activation='softmax'))
     return model
@@ -144,13 +151,14 @@ from sklearn.model_selection import train_test_split
 
 X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.2, random_state=42)
 
-datagen = ImageDataGenerator(featurewise_center=False,
-                            featurewise_std_normalization=False,
-                            width_shift_range=0.1,
-                            height_shift_range=0.1,
-                            zoom_range=0.2,
-                            shear_range=0.1,
-                            rotation_range=10.,)
+datagen = ImageDataGenerator(rotation_range=40,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    rescale=1/255,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest')
 
 datagen.fit(X_train)
 
@@ -174,7 +182,7 @@ do_train_model = model_augmentation.fit_generator(datagen.flow(X_train, Y_train,
                             epochs=nb_epoch,
                             validation_data=(X_val, Y_val),
                             callbacks=[LearningRateScheduler(lr_schedule),
-                                       ModelCheckpoint(path+'model_augmentation_2_epoch_4_sep.h5',save_best_only=True)]
+                                       ModelCheckpoint(path+'model_augmentation_12_SEP_epoch_20_sep.h5',save_best_only=True)]
                            )
 
 
