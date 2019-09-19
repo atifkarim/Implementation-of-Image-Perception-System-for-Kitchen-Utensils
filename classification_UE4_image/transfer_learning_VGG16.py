@@ -6,14 +6,21 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-#get_ipython().run_line_magic('matplotlib', 'inline')
+# %matplotlib inline
 # from __future__ import print_function
 import keras
 from keras.preprocessing.image import ImageDataGenerator, load_img
-
 from keras import models
 from keras import layers
 from keras import optimizers
+
+import glob, os
+from skimage import io, color, exposure, transform
+from skimage.color import rgb2gray
+
+from keras.optimizers import SGD
+from keras.callbacks import LearningRateScheduler, ModelCheckpoint
+from keras.layers import Input, Flatten, Dense
 
 
 # train_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/train'
@@ -22,14 +29,12 @@ from keras import optimizers
 train_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI'
 validation_dir = '/home/atif/machine_learning_stuff/ml_image/validation_image_AI'
 path_pre_trained_model = '/home/atif/machine_learning_stuff/model_file_keras/'
-IMG_SIZE = 224
-NUM_CLASS = 16
+IMG_SIZE = 48
+IMG_depth = 3 # for RGB 3, for B&W it will be 1
+NUM_CLASSES = 16
 
 
 # # All layers are freezed. Same as pre trained weights
-
-# In[3]:
-
 
 from keras.applications import VGG16
 
@@ -38,11 +43,7 @@ from keras.applications import VGG16
 
 
 #Load the VGG model
-vgg_conv = VGG16(weights=path_pre_trained_model+'vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(IMG_SIZE,IMG_SIZE, 3))
-
-
-# In[4]:
-
+loaded_vgg = VGG16(weights=path_pre_trained_model+'vgg_top_48_shape/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(IMG_SIZE,IMG_SIZE, IMG_depth)
 
 # Freeze all the layers
 # for layer in vgg_conv.layers[:]:
@@ -54,110 +55,200 @@ vgg_conv = VGG16(weights=path_pre_trained_model+'vgg16_weights_tf_dim_ordering_t
 
 # unfreeze last 4 layers
 
-for layer in vgg_conv.layers[:-4]:
+for layer in loaded_vgg.layers[:-4]:
     layer.trainable = False
 
+# If I write here layer.trainable = True then layer from top will be true. WHY?? because the indexing of the array is taking this decision. fro  top
+# to before the last 4 layer I have told to be False rest are will be true
+
 # Check the trainable status of the individual layers
-for layer in vgg_conv.layers:
+for layer in loaded_vgg.layers:
     print(layer, layer.trainable)
+
 
 # Create the model
 model = models.Sequential()
 
 # Add the vgg convolutional base model
-model.add(vgg_conv)
+model.add(loaded_vgg)
 
 # Add new layers
 model.add(layers.Flatten())
 model.add(layers.Dense(1024, activation='relu'))
+model.add(layers.Dense(4096, activation='relu'))
+model.add(layers.Dense(4096, activation='relu'))
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(NUM_CLASS, activation='softmax'))
+model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
 
 # Show a summary of the model. Check the number of trainable parameters
 model.summary()
 
 
+def preprocess_img(img):
+    # Histogram normalization in y
+    hsv = color.rgb2hsv(img)
+    hsv[:,:,2] = exposure.equalize_hist(hsv[:,:,2])
+    img = color.hsv2rgb(hsv)
+
+    # central scrop
+    min_side = min(img.shape[:-1])
+    centre = img.shape[0]//2, img.shape[1]//2
+    img = img[centre[0]-min_side//2:centre[0]+min_side//2,centre[1]-min_side//2:centre[1]+min_side//2,:]
+#    img = rgb2gray(img)
+
+    # rescale to standard size
+    img = transform.resize(img, (IMG_SIZE, IMG_SIZE))
+
+    # roll color axis to axis 0
+#     img = np.rollaxis(img,-1) # this lin is doing the channel fisrt operation
+
+    return img
+
+def get_class(img_path):
+    return int(img_path.split('/')[-2])
+#     return str(img_path.split('/')[-2]) # returning the folder name. If use -1 that means image name. consider the img_path.
+
+imgs = []
+labels = []
+root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
+#path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
+
+#all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
+
+all_img_paths = glob.glob(os.path.join(root_dir, '*/*.png')) #I have done the training with .png format image. If another type of image will come
+                                                                                    #them .png will be changed by that extension
+np.random.shuffle(all_img_paths)
+for img_path in all_img_paths:
+    try:
+        img = preprocess_img(io.imread(img_path))
+        label = get_class(img_path)
+        imgs.append(img)
+        labels.append(label)
+
+        if len(imgs)%1200 == 0: print("Processed {}/{}".format(len(imgs), len(all_img_paths)))
+            #print("get it 2")
+    except (IOError, OSError):
+        print('missed', img_path)
+        pass
+
+
+X = np.array(imgs, dtype='float32') #Keeping the image as an array
+X = X.reshape(len(imgs),IMG_SIZE,IMG_SIZE,IMG_depth) # write (IMG_SIZE,IMG_SIZE,1 if you want channel last; 1= grayscale;3=RGB)
+# Y = np.eye(NUM_CLASSES, dtype='uint8')[labels]
+Y = keras.utils.to_categorical(labels, NUM_CLASSES)
+
+print('X shape: ', X.shape,' type: ',type(X))
+print('Y shape: ', Y.shape,' type: ',type(Y))
+
+lr = 0.01
+sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy',
+          optimizer=sgd,
+          metrics=['accuracy'])
+
+path = '/home/atif/machine_learning_stuff/model_file_keras/'
+
+import datetime
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print("current time:", current_time)
+
+def lr_schedule(epoch):
+    return lr * (0.1 ** int(epoch / 10))
+
+batch_size = 32
+epochs = 50
+do_train_model=model.fit(X, Y,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_split=0.2,verbose=2,
+          #np.resize(img, (-1, <image shape>)
+          callbacks=[LearningRateScheduler(lr_schedule)])
+
+
+model.save(path+str(current_time)+'_vgg16_epoch_'+str(epochs)+'.h5')
+
+
 # # Training. No image augmentation
 
-epoch = 20
-saved_model_path = '/home/atif/machine_learning_stuff/unreal_cv_image/unreal_cv_image_manipulation/classification_UE4_image/trained_model/'
-
-
-image_size = IMG_SIZE
-
-# No Data augmentation 
-# train_datagen = ImageDataGenerator(rescale=1./255)
+# epoch = 20
+# saved_model_path = '/home/atif/machine_learning_stuff/unreal_cv_image/unreal_cv_image_manipulation/classification_UE4_image/trained_model/'
+#
+#
+# image_size = IMG_SIZE
+#
+# # No Data augmentation
+# # train_datagen = ImageDataGenerator(rescale=1./255)
+# # validation_datagen = ImageDataGenerator(rescale=1./255)
+#
+#
+# # with data augmentation
+# train_datagen = ImageDataGenerator(
+#       rescale=1./255,
+#       rotation_range=20,
+#       width_shift_range=0.2,
+#       height_shift_range=0.2,
+#       horizontal_flip=True,
+#       fill_mode='nearest')
+#
 # validation_datagen = ImageDataGenerator(rescale=1./255)
-
-
-# with data augmentation
-train_datagen = ImageDataGenerator(
-      rescale=1./255,
-      rotation_range=20,
-      width_shift_range=0.2,
-      height_shift_range=0.2,
-      horizontal_flip=True,
-      fill_mode='nearest')
-
-validation_datagen = ImageDataGenerator(rescale=1./255)
-
-# Change the batchsize according to your system RAM
-train_batchsize = 32
-val_batchsize = 10
-
-# Data Generator for Training data
-train_generator = train_datagen.flow_from_directory(
-        train_dir,
-        target_size=(image_size, image_size),
-        batch_size=train_batchsize,
-        class_mode='categorical')
-
-# Data Generator for Validation data
-validation_generator = validation_datagen.flow_from_directory(
-        validation_dir,
-        target_size=(image_size, image_size),
-        batch_size=val_batchsize,
-        class_mode='categorical',
-        shuffle=False)
-
-# Compile the model
-model.compile(loss='categorical_crossentropy',
-              optimizer=optimizers.RMSprop(lr=1e-4),
-              metrics=['acc'])
-
-# Train the Model
-history = model.fit_generator(
-      train_generator,
-      steps_per_epoch=train_generator.samples/train_generator.batch_size ,
-      epochs=epoch,
-      validation_data=validation_generator,
-      validation_steps=validation_generator.samples/validation_generator.batch_size,
-      verbose=1)
-
-# Save the Model
-model.save(saved_model_path+'vgg16_img_augmentaion_epoch_30.h5')
-
-# Plot the accuracy and loss curves
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs = range(len(acc))
-
-plt.plot(epochs, acc, 'b', label='Training acc')
-plt.plot(epochs, val_acc, 'r', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.savefig(saved_model_path+'vgg_16_img_aug_accuracy.jpg')
-plt.legend()
-
-plt.figure()
-
-plt.plot(epochs, loss, 'b', label='Training loss')
-plt.plot(epochs, val_loss, 'r', label='Validation loss')
-plt.title('Training and validation loss')
-plt.savefig(saved_model_path+'vgg_16_img_aug_loss.jpg')
-plt.legend()
+#
+# # Change the batchsize according to your system RAM
+# train_batchsize = 32
+# val_batchsize = 10
+#
+# # Data Generator for Training data
+# train_generator = train_datagen.flow_from_directory(
+#         train_dir,
+#         target_size=(image_size, image_size),
+#         batch_size=train_batchsize,
+#         class_mode='categorical')
+#
+# # Data Generator for Validation data
+# validation_generator = validation_datagen.flow_from_directory(
+#         validation_dir,
+#         target_size=(image_size, image_size),
+#         batch_size=val_batchsize,
+#         class_mode='categorical',
+#         shuffle=False)
+#
+# # Compile the model
+# model.compile(loss='categorical_crossentropy',
+#               optimizer=optimizers.RMSprop(lr=1e-4),
+#               metrics=['acc'])
+#
+# # Train the Model
+# history = model.fit_generator(
+#       train_generator,
+#       steps_per_epoch=train_generator.samples/train_generator.batch_size ,
+#       epochs=epoch,
+#       validation_data=validation_generator,
+#       validation_steps=validation_generator.samples/validation_generator.batch_size,
+#       verbose=1)
+#
+# # Save the Model
+# model.save(saved_model_path+'vgg16_img_augmentaion_epoch_30.h5')
+#
+# # Plot the accuracy and loss curves
+# acc = history.history['acc']
+# val_acc = history.history['val_acc']
+# loss = history.history['loss']
+# val_loss = history.history['val_loss']
+#
+# epochs = range(len(acc))
+#
+# plt.plot(epochs, acc, 'b', label='Training acc')
+# plt.plot(epochs, val_acc, 'r', label='Validation acc')
+# plt.title('Training and validation accuracy')
+# plt.savefig(saved_model_path+'vgg_16_img_aug_accuracy.jpg')
+# plt.legend()
+#
+# plt.figure()
+#
+# plt.plot(epochs, loss, 'b', label='Training loss')
+# plt.plot(epochs, val_loss, 'r', label='Validation loss')
+# plt.title('Training and validation loss')
+# plt.savefig(saved_model_path+'vgg_16_img_aug_loss.jpg')
+# plt.legend()
 
 # plt.show()
 
@@ -304,30 +395,6 @@ plt.legend()
 # ax.set_ylim(16)
 # figure = ax.get_figure()
 # # figure.savefig('2_sep_ax_conf.png', dpi=400)
-#
-#
-# # In[ ]:
-#
-#
-#
-#
-#
-# # In[ ]:
-#
-#
-#
-#
-#
-# # In[ ]:
-#
-#
-#
-#
-#
-# # In[ ]:
-#
-#
-#
 #
 #
 # # In[26]:
