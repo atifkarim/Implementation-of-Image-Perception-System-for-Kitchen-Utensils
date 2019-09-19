@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 import keras
 from keras.preprocessing.image import ImageDataGenerator, load_img
 
+from keras import models
+from keras import layers
+from keras import optimizers
+
 
 # train_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/train'
 # validation_dir = '/home/atif/machine_learning_stuff/ml_image/copy_image/validation'
@@ -50,18 +54,12 @@ vgg_conv = VGG16(weights=path_pre_trained_model+'vgg16_weights_tf_dim_ordering_t
 
 # unfreeze last 4 layers
 
-# Freeze all the layers
 for layer in vgg_conv.layers[:-4]:
     layer.trainable = False
 
 # Check the trainable status of the individual layers
 for layer in vgg_conv.layers:
     print(layer, layer.trainable)
-
-
-from keras import models
-from keras import layers
-from keras import optimizers
 
 # Create the model
 model = models.Sequential()
@@ -85,14 +83,7 @@ epoch = 20
 saved_model_path = '/home/atif/machine_learning_stuff/unreal_cv_image/unreal_cv_image_manipulation/classification_UE4_image/trained_model/'
 
 
-# In[7]:
-
-
 image_size = IMG_SIZE
-
-
-# In[8]:
-
 
 # No Data augmentation 
 # train_datagen = ImageDataGenerator(rescale=1./255)
