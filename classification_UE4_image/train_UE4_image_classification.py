@@ -40,6 +40,10 @@ NUM_CLASSES = 16 # change it with respect to the desired class
 IMG_SIZE = 48 # change it if it desired
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 
+import datetime
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print("current time:", current_time)
+
 
 # # Image preprocessing function
 
@@ -146,6 +150,8 @@ def cnn_model():
 
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
+    model.add(Dense(2048, activation='relu'))
+    model.add(Dense(4096, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(NUM_CLASSES, activation='softmax'))
     return model
@@ -157,7 +163,6 @@ sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy',
           optimizer=sgd,
           metrics=['accuracy'])
-
 
 # In[15]:
 
@@ -178,10 +183,10 @@ def lr_schedule(epoch):
     return lr * (0.1 ** int(epoch / 10))
 
 batch_size = 32
-epochs = 30
+epochs = 50
 do_train_model=model.fit(X, Y,
           batch_size=batch_size,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+'general_2_sep_ep_30_epoch.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+str(current_time)+'_new_model_channel_first_epoch_'+str(epochs)+'.h5', save_best_only=True)])
