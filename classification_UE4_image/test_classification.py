@@ -29,7 +29,7 @@ from matplotlib.pylab import rcParams
 #import keras
 
 NUM_CLASSES = 16 # change it with respect to the desired class
-IMG_SIZE = 150 # change it if it desired
+IMG_SIZE = 48 # change it if it desired
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 
 def preprocess_img(img):
@@ -59,7 +59,7 @@ def get_class(img_path):
 
 
 from keras.models import load_model
-model = load_model('/home/atif/machine_learning_stuff/model_file_keras/inception_resnet_V2_2_sep_30_epoch.h5')
+model = load_model('/home/atif/machine_learning_stuff/model_file_keras/2019-09-20 01:59:56_vgg16_epoch_50.h5')
 
 import pandas as pd
 
