@@ -59,9 +59,10 @@ model.add(loaded_vgg)
 
 # Add new layers
 model.add(layers.Flatten())
+model.add(layers.Dense(4096, activation='relu'))
+model.add(layers.Dense(2048, activation='relu'))
 model.add(layers.Dense(1024, activation='relu'))
-model.add(layers.Dense(4096, activation='relu'))
-model.add(layers.Dense(4096, activation='relu'))
+model.add(layers.Dense(512, activation='relu'))
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
 
@@ -85,7 +86,7 @@ def preprocess_img(img):
     img = transform.resize(img, (IMG_SIZE, IMG_SIZE))
 
     # roll color axis to axis 0
-#     img = np.rollaxis(img,-1) # this lin is doing the channel fisrt operation
+#     img = np.rollaxis(img,-1) # this line is doing the channel fisrt operation
 
     return img
 
@@ -152,8 +153,7 @@ do_train_model=model.fit(X, Y,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule)])
-# ,ModelCheckpoint(path+str(current_time)+'_new_model_'+str(epochs)+'.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule) ,ModelCheckpoint(path+str(current_time)+'_VGG_16_epoch_'+str(epochs)+'.h5', save_best_only=True)])
 
 
-model.save(path+str(current_time)+'_vgg16_epoch_'+str(epochs)+'.h5')
+#model.save(path+str(current_time)+'_vgg16_epoch_'+str(epochs)+'.h5')
