@@ -56,10 +56,10 @@ def get_class(img_path):
     return int(img_path.split('/')[-2])
 #     return str(img_path.split('/')[-2]) # returning the folder name. If use -1 that means image name. consider the img_path.
 
-
+path = '/home/atif/machine_learning_stuff/model_file_keras/'
 
 from keras.models import load_model
-model = load_model('/home/atif/machine_learning_stuff/model_file_keras/2019-09-20 01:59:56_vgg16_epoch_50.h5')
+model = load_model(path+'2019-09-23 10:29:02_new_model_channel_first_epoch_50.h5')
 
 import pandas as pd
 
