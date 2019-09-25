@@ -32,7 +32,11 @@ NUM_CLASSES = 16 # change it with respect to the desired class
 IMG_SIZE = 48 # change it if it desired
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 
+path = '/home/atif/machine_learning_stuff/model_file_keras/'
 
+import datetime
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print("current time:", current_time)
 
 def preprocess_img(img):
     # Histogram normalization in y
@@ -127,24 +131,21 @@ def cnn_model():
     model.add(Dropout(0.2))
 
     model.add(Flatten())
-    model.add(Dense(1024, activation='relu'))
-    model.add(Dropout(0.5))
+    model.add(Dense(4096, activation='relu'))
+#    model.add(Dense(2048, activation='relu'))
+#    model.add(Dense(1024, activation='relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(NUM_CLASSES, activation='softmax'))
     return model
 
-model = cnn_model()
+#model = cnn_model()
 
-lr = 0.01
-sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='categorical_crossentropy',
-          optimizer=sgd,
-          metrics=['accuracy'])
+#lr = 0.01
+#sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
+#model.compile(loss='categorical_crossentropy',
+#          optimizer=sgd,
+#          metrics=['accuracy'])
 
-
-
-
-
-path = '/home/atif/machine_learning_stuff/model_file_keras/'
 
 
 from sklearn.model_selection import train_test_split
@@ -154,7 +155,7 @@ X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.2, random_st
 datagen = ImageDataGenerator(rotation_range=40,
     width_shift_range=0.2,
     height_shift_range=0.2,
-    rescale=1/255,
+    #rescale=1/255,
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
@@ -163,6 +164,7 @@ datagen = ImageDataGenerator(rotation_range=40,
 datagen.fit(X_train)
 
 model_augmentation = cnn_model()
+model_augmentation.summary()
 # let's train the model using SGD + momentum (how original).
 lr = 0.01
 sgd = SGD(lr=lr, decay=1e-6, momentum=0.9, nesterov=True)
@@ -175,14 +177,14 @@ def lr_schedule(epoch):
     return lr*(0.1**int(epoch/10))
 
 
-nb_epoch = 30
+nb_epoch = 50
 batch_size = 32
 do_train_model = model_augmentation.fit_generator(datagen.flow(X_train, Y_train, batch_size=batch_size),
                             steps_per_epoch=X_train.shape[0],
                             epochs=nb_epoch,
                             validation_data=(X_val, Y_val),
                             callbacks=[LearningRateScheduler(lr_schedule),
-                                       ModelCheckpoint(path+'model_augmentation_12_SEP_epoch_20_sep.h5',save_best_only=True)]
+                                       ModelCheckpoint(path+str(current_time)+'_augmented_new_model_channel_first_epoch_'+str(nb_epoch)+'.h5',save_best_only=True)]
                            )
 
 
@@ -199,7 +201,7 @@ plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train_accuracy', 'validation_accuracy'], loc='upper left')
 plt.rcParams['figure.figsize'] =(20,10)
-plt.savefig(path+'augmentation_epoch_vs_accuracy.jpg')
+plt.savefig(path+str(current_time)+'_augmented_general_model_acc_vs_epoch.jpg')
 # plt.show()
 
 
@@ -214,5 +216,5 @@ plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train_loss', 'validation_loss'], loc='upper left')
-plt.savefig(path+'augmentation_epoch_vs_loss.jpg')
+plt.savefig(path+str(current_time)+'_augmented_general_model_loss_vs_epoch.jpg')
 # plt.show()
