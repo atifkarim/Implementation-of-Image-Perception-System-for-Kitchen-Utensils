@@ -85,7 +85,7 @@ root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
 
-all_img_paths = glob.glob(os.path.join(root_dir, '*/*.png')) #I have done the training with .png format image. If another type of image will come 
+all_img_paths = glob.glob(os.path.join(root_dir, '*/*')) #I have done the training with .png format image. If another type of image will come 
                                                                                     #them .png will be changed by that extension
 np.random.shuffle(all_img_paths)
 for img_path in all_img_paths:
