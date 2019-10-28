@@ -29,9 +29,9 @@ from keras.layers import Input, Flatten, Dense
 train_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI'
 validation_dir = '/home/atif/machine_learning_stuff/ml_image/validation_image_AI'
 path_pre_trained_model = '/home/atif/machine_learning_stuff/model_file_keras/'
-IMG_SIZE = 48
+IMG_SIZE = 100
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
-NUM_CLASSES = 16
+NUM_CLASSES = 19
 
 
 # # All layers are freezed. Same as pre trained weights
@@ -43,7 +43,7 @@ from keras.applications import VGG16
 
 
 #Load the VGG model
-loaded_vgg = VGG16(weights=path_pre_trained_model+'vgg_top_48_shape/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(IMG_SIZE,IMG_SIZE, IMG_depth)
+loaded_vgg = VGG16(weights=path_pre_trained_model+'vgg_top_48_shape/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(IMG_SIZE,IMG_SIZE, IMG_depth))
 
 # Freeze all the layers
 # for layer in vgg_conv.layers[:]:
@@ -74,8 +74,8 @@ model.add(loaded_vgg)
 
 # Add new layers
 model.add(layers.Flatten())
-model.add(layers.Dense(1024, activation='relu'))
-model.add(layers.Dense(4096, activation='relu'))
+#model.add(layers.Dense(1024, activation='relu'))
+#model.add(layers.Dense(4096, activation='relu'))
 model.add(layers.Dense(4096, activation='relu'))
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
@@ -110,12 +110,12 @@ def get_class(img_path):
 
 imgs = []
 labels = []
-root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
+root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_classification_better_resolution/crop/'
 #path='/home/atif/training_by_several_learning_process/flower_photos/00000/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
 
-all_img_paths = glob.glob(os.path.join(root_dir, '*/*.png')) #I have done the training with .png format image. If another type of image will come
+all_img_paths = glob.glob(os.path.join(root_dir, '*/*')) #I have done the training with .png format image. If another type of image will come
                                                                                     #them .png will be changed by that extension
 np.random.shuffle(all_img_paths)
 for img_path in all_img_paths:
@@ -165,7 +165,7 @@ do_train_model=model.fit(X, Y,
           callbacks=[LearningRateScheduler(lr_schedule)])
 
 
-model.save(path+str(current_time)+'_vgg16_epoch_'+str(epochs)+'.h5')
+model.save(path+str(current_time)+'_vgg16_image_size_100_CHANNEL_LAST_epoch_'+str(epochs)+'.h5')
 
 
 # # Training. No image augmentation

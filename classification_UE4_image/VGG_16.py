@@ -21,9 +21,9 @@ from keras.layers import Input, Flatten, Dense
 train_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI'
 validation_dir = '/home/atif/machine_learning_stuff/ml_image/validation_image_AI'
 path_pre_trained_model = '/home/atif/machine_learning_stuff/model_file_keras/'
-IMG_SIZE = 48
+IMG_SIZE = 100
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
-NUM_CLASSES = 16
+NUM_CLASSES = 19
 
 
 # # All layers are freezed. Same as pre trained weights
@@ -60,9 +60,9 @@ model.add(loaded_vgg)
 # Add new layers
 model.add(layers.Flatten())
 model.add(layers.Dense(4096, activation='relu'))
-model.add(layers.Dense(2048, activation='relu'))
-model.add(layers.Dense(1024, activation='relu'))
-model.add(layers.Dense(512, activation='relu'))
+#model.add(layers.Dense(2048, activation='relu'))
+#model.add(layers.Dense(1024, activation='relu'))
+#model.add(layers.Dense(512, activation='relu'))
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
 
@@ -102,7 +102,7 @@ root_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI/'
 
 #all_img_paths = glob.glob(path+ '5547758_eea9edfd54_n_000.jpg')
 
-all_img_paths = glob.glob(os.path.join(root_dir, '*/*.png')) #I have done the training with .png format image. If another type of image will come 
+all_img_paths = glob.glob(os.path.join(root_dir, '*/*')) #I have done the training with .png format image. If another type of image will come 
                                                                                     #them .png will be changed by that extension
 np.random.shuffle(all_img_paths)
 for img_path in all_img_paths:
@@ -147,13 +147,13 @@ def lr_schedule(epoch):
     return lr * (0.1 ** int(epoch / 10))
 
 batch_size = 32
-epochs = 50
+epochs = 2
 do_train_model=model.fit(X, Y,
           batch_size=batch_size,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule) ,ModelCheckpoint(path+str(current_time)+'_VGG_16_epoch_'+str(epochs)+'.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule) ,ModelCheckpoint(path+str(current_time)+'_VGG_16_image_size_100_epoch_'+str(epochs)+'.h5', save_best_only=True)])
 
 
 #model.save(path+str(current_time)+'_vgg16_epoch_'+str(epochs)+'.h5')
