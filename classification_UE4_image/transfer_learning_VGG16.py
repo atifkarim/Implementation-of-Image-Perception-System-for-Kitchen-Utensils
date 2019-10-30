@@ -29,7 +29,7 @@ from keras.layers import Input, Flatten, Dense
 train_dir = '/home/atif/machine_learning_stuff/ml_image/train_image_AI'
 validation_dir = '/home/atif/machine_learning_stuff/ml_image/validation_image_AI'
 path_pre_trained_model = '/home/atif/machine_learning_stuff/model_file_keras/'
-IMG_SIZE = 100
+IMG_SIZE = 48
 IMG_depth = 3 # for RGB 3, for B&W it will be 1
 NUM_CLASSES = 19
 
@@ -162,10 +162,10 @@ do_train_model=model.fit(X, Y,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+str(current_time)+'_vgg16_image_size_48_CHANNEL_LAST_epoch_'+str(epochs)+'.h5', save_best_only=True)])
 
 
-model.save(path+str(current_time)+'_vgg16_image_size_100_CHANNEL_LAST_epoch_'+str(epochs)+'.h5')
+#model.save(path+str(current_time)+'_vgg16_image_size_48_CHANNEL_LAST_epoch_'+str(epochs)+'.h5')
 
 
 # # Training. No image augmentation
