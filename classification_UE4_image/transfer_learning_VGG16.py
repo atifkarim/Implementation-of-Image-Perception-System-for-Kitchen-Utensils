@@ -76,7 +76,7 @@ model.add(loaded_vgg)
 model.add(layers.Flatten())
 #model.add(layers.Dense(1024, activation='relu'))
 #model.add(layers.Dense(4096, activation='relu'))
-model.add(layers.Dense(4096, activation='relu'))
+model.add(layers.Dense(8192, activation='relu'))
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
 
@@ -162,7 +162,7 @@ do_train_model=model.fit(X, Y,
           epochs=epochs,
           validation_split=0.2,verbose=2,
           #np.resize(img, (-1, <image shape>)
-          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+str(current_time)+'_vgg16_image_size_48_CHANNEL_LAST_epoch_'+str(epochs)+'.h5', save_best_only=True)])
+          callbacks=[LearningRateScheduler(lr_schedule),ModelCheckpoint(path+str(current_time)+'_vgg16_image_size_48_CHANNEL_LAST_8192_dense_epoch_'+str(epochs)+'.h5', save_best_only=True)])
 
 
 #model.save(path+str(current_time)+'_vgg16_image_size_48_CHANNEL_LAST_epoch_'+str(epochs)+'.h5')
