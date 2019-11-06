@@ -48,7 +48,7 @@ def preprocess_img(img):
     img = transform.resize(img, (IMG_SIZE, IMG_SIZE))
 
     # roll color axis to axis 0
-#    img = np.rollaxis(img,-1)
+    img = np.rollaxis(img,-1)
 
     return img
 
@@ -57,7 +57,7 @@ def get_class(img_path):
 #     return str(img_path.split('/')[-2]) # returning the folder name. If use -1 that means image name. consider the img_path.
 
 path = '/home/atif/machine_learning_stuff/model_file_keras/'
-model_name = '2019-10-30 19:30:55_vgg16_image_size_48_CHANNEL_LAST_8192_dense_epoch_50.h5'
+model_name = '2019-11-01 23:16:40_new_image_CSV_PROCESS_model_epoch_70.h5'
 
 from keras.models import load_model
 model = load_model(path+model_name)
