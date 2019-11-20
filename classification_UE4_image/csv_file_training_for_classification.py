@@ -126,7 +126,7 @@ def cnn_model():
 
     model.add(Flatten())
     model.add(Dense(4096, activation='relu'))
-    #     model.add(Dense(2048, activation='relu'))
+    #model.add(Dense(2048, activation='relu'))
     #     model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(NUM_CLASSES, activation='softmax'))
@@ -153,7 +153,7 @@ def lr_schedule(epoch):
     return lr * (0.1 ** int(epoch / 10))
 
 batch_size = 32
-epochs = 70
+epochs = 50
 do_train_model=model.fit(X, Y,
           batch_size=batch_size,
           epochs=epochs,
