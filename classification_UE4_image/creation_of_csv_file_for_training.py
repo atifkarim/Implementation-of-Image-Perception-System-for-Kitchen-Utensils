@@ -1,51 +1,24 @@
 import os
 
-# def getListOfFiles(dirName):
-#     # create a list of file and sub directories
-#     # names in the given directory
-#     listOfFile = os.listdir(dirName)
-#     print(listOfFile)
-#     allFiles = list()
-#     # Iterate over all the entries
-#     for entry in listOfFile:
-#         # Create full path
-#         fullPath = os.path.join(dirName, entry)
-#         # print('entry: ',entry)
-#         # If entry is a directory then get the list of files in this directory
-#         if os.path.isdir(fullPath):
-#             allFiles = allFiles + getListOfFiles(fullPath)
-#         else:
-#             allFiles.append(fullPath)
-#
-#     return allFiles
 
-dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_reduced/new_method/'
+dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_better_resolution/image_container/crop/'
 #dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_better_resolution/image_container/crop/'
-
-# Get the list of all files in directory tree at given path
-# listOfFiles = getListOfFiles(dirName)
-
-# print(type(listOfFiles))
-# print(listOfFiles)
-#
-# for i in listOfFiles:
-#     print(i)
 
 
 current_dir = os.getcwd()
 print(current_dir)
-file_name = 'train_image_reduced.csv'
+file_name = 'train_image_file.csv'
 
 evaluation_metrics_file_path = current_dir+'/'+file_name
 if not os.path.isfile(evaluation_metrics_file_path):
     f = open(evaluation_metrics_file_path,'a')
     f.close()
-    print('metrics file now created')
+    print('csv file for training is created')
 else:
     os.remove(evaluation_metrics_file_path)
     f = open(evaluation_metrics_file_path,'a')
     f.close()
-    print('metrics file removed and created')
+    print('csv file for testing is created')
 
 
 folder_list = []
@@ -82,10 +55,3 @@ for x in ent:
         # print('/\/'*40+'count of image: ',count)
         # count=1
         # print('!'*60)
-
-
-# A = [1,20,3,-2,5,64]
-#
-# for i in A:
-#     print(A.index(-2))
-
