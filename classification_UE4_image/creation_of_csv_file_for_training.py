@@ -1,24 +1,42 @@
+# This file can be used to generate csv file for training and testing purpose
+# Press 1 for training and any other number for testing file creation
+
 import os
 
+print('*'*50)
+print("Press 1 for the creation of Training CSV file \nPress 2 for the creation of Testing CSV file")
+print('*'*50)
 
-dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_better_resolution/image_container/crop/'
-#dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_better_resolution/image_container/crop/'
+purpose_of_csv_file = input("Desire method: ")
+purpose_of_csv_file = int(purpose_of_csv_file)
+print(purpose_of_csv_file,'  ',type(purpose_of_csv_file))
 
 
 current_dir = os.getcwd()
 print(current_dir)
-file_name = 'train_image_file.csv'
+
+
+if purpose_of_csv_file == 1:
+    print('CSV file for training will be generated')
+    dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_better_resolution/image_container/crop/'
+    file_name='train_image_file.csv'
+else:
+    print('CSV file for testing will be generated')
+    dirName = '/home/atif/machine_learning_stuff/ml_image/train_image_AI_reduced/new_method/'
+    file_name = 'test_image_file.csv'
+
+
 
 evaluation_metrics_file_path = current_dir+'/'+file_name
 if not os.path.isfile(evaluation_metrics_file_path):
     f = open(evaluation_metrics_file_path,'a')
     f.close()
-    print('csv file for training is created')
+    print('csv file is created')
 else:
     os.remove(evaluation_metrics_file_path)
     f = open(evaluation_metrics_file_path,'a')
     f.close()
-    print('csv file for testing is created')
+    print('old csv file is removed and new is created')
 
 
 folder_list = []
