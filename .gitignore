@@ -39,4 +39,5 @@ classification_UE4_image/.idea
 classification_UE4_image/trained_model
 capture_image_config_file
 capture_image_config_json
+*.csv
 
