@@ -27,14 +27,14 @@ else:
 
 
 
-evaluation_metrics_file_path = current_dir+'/'+file_name
-if not os.path.isfile(evaluation_metrics_file_path):
-    f = open(evaluation_metrics_file_path,'a')
+csv_file_path = current_dir+'/'+file_name
+if not os.path.isfile(csv_file_path):
+    f = open(csv_file_path,'a')
     f.close()
     print('csv file is created')
 else:
-    os.remove(evaluation_metrics_file_path)
-    f = open(evaluation_metrics_file_path,'a')
+    os.remove(csv_file_path)
+    f = open(csv_file_path,'a')
     f.close()
     print('old csv file is removed and new is created')
 
@@ -49,7 +49,7 @@ folder_list.sort()
 print(folder_list)
 
 
-f = open(evaluation_metrics_file_path, 'a')
+f = open(csv_file_path, 'a')
 f.write('filename'+';'+'classID')
 f.write('\n')
 for x in ent:
