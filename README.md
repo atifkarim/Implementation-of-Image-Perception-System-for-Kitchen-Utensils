@@ -1,5 +1,5 @@
-# UnrealCV image_manipulation
-The goal of this repo is to use Unreal Engine 4(UE4) for making dataset for Robotic perception system. For this purpose here I have introduced the combination of UE4 and UnrealCV.
+# Autonomous Image Perception System for Inventory Robot
+The goal of this project is to develop a system which will be used in a retailer shop to count and filling objects from the shell. The project is conducting by [Institute for Artificial Intelligence](https://ai.uni-bremen.de/). Ideas and developed steps are discussed below.
 
 # Requirements
 
