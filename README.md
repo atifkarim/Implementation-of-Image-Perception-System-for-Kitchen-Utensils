@@ -33,11 +33,12 @@ After performing the above task the output folder structure will be as follows -
   * lit (content is RGB image)
   * object_mask (content is mask image)
   * RGB_info
-  
-  
 
+**Sample image and ROI file is linked below**
 
-
-![GitHub Logo](https://www.pexels.com/photo/beautiful-beauty-blue-bright-414612/)
+![lit image](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/1_SM_CalgonitFinish_2_0_90_60_lit.png)
+![mask image](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/1_SM_CalgonitFinish_2_0_90_60_object_mask.png)
+![cropped image](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/1_SM_CalgonitFinish_2_0_90_60_lit_cropped.png)
+![ROI information](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/1_SM_CalgonitFinish_2_0_90_60_lit.txt)
   
   
