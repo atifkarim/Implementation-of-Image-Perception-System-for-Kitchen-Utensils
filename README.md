@@ -43,3 +43,5 @@ After performing the above task the output folder structure will be as follows -
 
 ## [ROI information](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/1_SM_CalgonitFinish_2_0_90_60_lit.txt)
 ## [Color Mask Info](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/sample_image_and_label/color_info_SM_CalgonitFinish_2.txt)
+
+# Object detetion and localization using YOLO
