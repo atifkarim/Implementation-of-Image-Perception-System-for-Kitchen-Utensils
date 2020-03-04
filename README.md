@@ -71,13 +71,12 @@ names = data/obj.names\
 backup = backup/
 
 Description of these lines are -
-* *classes* is the value of used class to train.  In this project used class was **19**. 
-* *train* and *valid* are two files which contains the image path of training and validation images.  To make these files one python file is used named [process.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/process.py) which will be placed in the darknet/data/directory. 
-* *backup* is the folder name where trained weights will be store and whose path is darknet/backup/.
-* *names* is  the  variable  which  indicates  the  path  of obj.names whose  contained  information  are  the  name  of  all classes.  \
+* **classes** is the value of used class to train.  In this project used class was **19**. 
+* **train** and **valid** are two files which contains the **image path** of training and validation images.  To make these files one python file is used named [process.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/process.py) which will be placed in the **darknet/data/** directory. 
+* **backup** is the folder name where **trained weights** will be store and whose path is **darknet/backup/**.
+* **names** is the variable which indicates the path of **obj.names** whose contained information are the name of all classes. This [code](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/creation_obj_names_file.py) can be used to create this obj.names file.
 
-This [code](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/creation_obj_names_file.py) can be used to create this obj.names file. \
-In darknet/cfg/directory yolo-obj.cfg file would be placed. It is the configuration file to train.\
+In **darknet/cfg/** directory **yolo-obj.cfg** file would be placed. It is the configuration file to train.
 
 Some points to be noted during use of this file are listed below :
 * Open yolo-obj.cfg file and search for **classes** and put the desired number of your class there
