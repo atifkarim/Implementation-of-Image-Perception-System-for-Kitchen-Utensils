@@ -1,5 +1,19 @@
 # This file can be used to generate csv file for training and testing purpose
 # Press 1 for training and any other number for testing file creation
+# To execute this code please make a folder structure as like as follows--
+# Images_folder
+#  -- Train_folder
+#  ---- Folder_1 (images of class 1 will be here)
+#  ----**
+#  ----**
+#  ----**
+#  ---- Folder_n (images of class n will be here)
+#  -- Test_folder
+#  ---- Folder_1 (images of class 1 will be here)
+#  ----**
+#  ----**
+#  ----**
+#  ---- Folder_n (images of class n will be here)
 
 import os
 
@@ -45,7 +59,7 @@ for t in ent:
     folder_list.append(t)
 
 print(folder_list)
-folder_list.sort()
+folder_list.sort() # sorted folder name which is containing all of the images and the name of the folder is nothing but representative of class
 print(folder_list)
 
 
@@ -55,7 +69,7 @@ f.write('\n')
 for x in ent:
     # count = 0
     # print(x,'*'*20)
-    class_id = folder_list.index(x)
+    class_id = folder_list.index(x) # use the index of the sorted folder list to define class number
     print(class_id,'*'*10,x)
     full_path = os.path.join(dirName,x)
     # print('folder_name: ',full_path)

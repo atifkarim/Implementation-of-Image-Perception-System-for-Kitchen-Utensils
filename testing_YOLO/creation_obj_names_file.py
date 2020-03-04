@@ -1,3 +1,5 @@
+# Creation of obj.names is possibe with this code. It will take all of the classes name using the folder's name from the referred path
+
 import os
 
 dirName = '/media/atif/BE0E05910E0543BD/University of Bremen MSc/problem_solving/convert_yolo_folder/Images/'

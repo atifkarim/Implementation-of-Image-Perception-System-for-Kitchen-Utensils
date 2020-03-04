@@ -1,3 +1,5 @@
+# from the obj folder located in darket directory this code takes the image and make two text file which contains train and test file for YOLO
+
 import glob, os
 
 # Current directory

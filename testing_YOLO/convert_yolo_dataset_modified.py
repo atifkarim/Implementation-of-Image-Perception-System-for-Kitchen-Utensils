@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 
+# this file is dedicated to convert annotated text file to YOLO format
+
 import os
 from os import walk, getcwd
 from PIL import Image
 
 
-dirName = "/media/atif/BE0E05910E0543BD/University of Bremen MSc/problem_solving/convert_yolo_folder/Images/"
+dirName = "/media/atif/BE0E05910E0543BD/University of Bremen MSc/problem_solving/convert_yolo_folder/Images/" # All images are stored here in sub_folder. Each sub_folder means each class 
 
 
-folder_name_string = []
+folder_name_string = [] # to store all the names of the sub_folder in a list. It is the process of gathering all the class name as the sub_folders name are nothing but class name
 ent = os.listdir(dirName)
 for t in ent:
     folder_name_string.append(t)
 
 print(folder_name_string)
-folder_name_string.sort()
+folder_name_string.sort() # sorting class name alphabetically
 print(folder_name_string)
 
 
