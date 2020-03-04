@@ -16,8 +16,8 @@ Step by step the working method of the automated image capturing tool is describ
 
 * First of all of the objects which will be captured by UE4 will be placed or imported in the game
 * A [configuration file](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/config_file_capture_image.json) is made where all of the angles and objects name with the radius(distance between camera and the object) are mentioned.
-* Before running the [main python file](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) it is obvious to turn on thePLAY moodin UE4
-* In  [main.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) two  functions  are  called,  one  for  cropping  the  object  from  the  RGB  image∗using  themask information and another is for doing the annotation
+* Before running the [main python file](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) it is obvious to turn on the PLAY moodin UE4
+* In [main.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) two functions are called, one for cropping the object from the RGB image using the mask information and another is for doing the annotation
 * After running the [main.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) for one actoar at a time RGB image, mask image, normal image, ROI(ina text file) and Mask Image information(1 text file for one actor) are saved.
  Two things to remind --
  
