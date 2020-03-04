@@ -61,9 +61,9 @@ Here, **Images** folder keep all of the RGB images with sub-folder(sub-folder me
 
 # Arrangement of folder and files to train with YOLO
 
-The contents of the out folder (text files with ROI information) and the Images folder would be placed in a folder named obj in the darknet/data/directory.  This darknet folder is nothing but a [git repository](https://github.com/pjreddie/darknet) which is also  mentioned  in  [this  link](https://pjreddie.com/darknet/yolo/). During  putting  all  of  the  images  and  text  file  don’t  use  any sub-directory. Direct put all of the contents.\
-Another two files named obj.names and obj.data these two files also be placed in the darknet/data/directory. \
-Content of obj.data is like as the following lines -\
+The contents of the **out** folder (text files with ROI information) and the **Images** folder would be placed in a folder named **obj** in the darknet/data/directory.  This darknet folder is nothing but a [git repository](https://github.com/pjreddie/darknet) which is also  mentioned  in  [this  link](https://pjreddie.com/darknet/yolo/). During  putting  all  of  the  images  and  text  file  don’t  use  any sub-directory. Direct put all of the contents.\
+Another two files named **obj.names** and **obj.data** these two files also be placed in the **darknet/data/directory**. \
+Content of **obj.data** is like as the following lines -\
 classes= 19\
 train = data/train.txt\
 valid = data/test.txt\
