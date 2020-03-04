@@ -51,12 +51,12 @@ This section will show the method of using YOLO for detecting object from the Im
 Training with YOLO can be divided into two parts.  First one is to convert dataset for YOLO processand the later will stand for the training.
 
 **Dataset for YOLO**
-To convert dataset for YOLO means to make dataset containing the ROI(region of interest) informationwith class number.  A structured repository for this operation could be found [here](https://github.com/ManivannanMurugavel/YOLO-Annotation-Tool).  In this repository twofolders and one file is most important and they are as follows:
+To convert dataset for YOLO means to make dataset containing the ROI(region of interest) informationwith class number.  A structured repository for this operation could be found [here](https://github.com/ManivannanMurugavel/YOLO-Annotation-Tool).  In this repository two folders and one file is most important and they are as follows:
 * Images
 * Labels
 * convert.py
 
-Here, in Images folder keep all of the RGB images with sub-folder.  In the Labels folder keep the sub-folders which contains all the ROI information of actors in each image.  Inside of the Labels folder a destination folder folder named out should be created where the converted YOLO formatfile  is  saved.   Reason  of  using convert.py file is to  generate files in YOLO format. I have modified the convert.py file and it would be found [here](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/convert_yolo_dataset_modified.py).
+Here, **Images** folder keep all of the RGB images with sub-folder(sub-folder means the folder which will contains images of different class. Naming of folders could be anything eg. class name).  In the Labels folder keep the sub-folders which contains all the ROI information of actors in each image.  Inside of the Labels folder a destination folder folder named out should be created where the converted YOLO formatfile  is  saved.   Reason  of  using convert.py file is to  generate files in YOLO format. I have modified the convert.py file and it would be found [here](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/testing_YOLO/convert_yolo_dataset_modified.py).
 
 
 # Arrangement of folder and files to train with YOLO
