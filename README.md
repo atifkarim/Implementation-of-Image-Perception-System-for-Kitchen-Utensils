@@ -2,10 +2,10 @@
 The goal of this project is to develop a system which will be used in a retailer shop to count and filling objects from the shell. The project is conducting by [Institute for Artificial Intelligence](https://ai.uni-bremen.de/). Ideas and developed steps are discussed below.
 
 # Requirements
-Unreal Engine (Tested in Windows 10, 64 bit machine with v4.16, 4.19)
-UnrealCV(fast branch)
-Python 3.6
-Windows 10, 64 bit
+* Unreal Engine (Tested in Windows 10, 64 bit machine with v4.16, 4.19)
+* UnrealCV(fast branch)
+* Python 3.6
+* Windows 10, 64 bit
 
 
 # Creation of image dataset from Unreal Engine
