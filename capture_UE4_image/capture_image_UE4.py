@@ -250,10 +250,10 @@ for i in actor_dict:
 # =============================================================================
     
 #    dirName=r'F:/unreal_cv_documentation/my_dir/'+str(num_1)+str(object_class)+'/'+str(i)+'/'
-    dirName_RGB= final_directory+'/'+str(viewmode_1)+'/'+str(i)+'/'
-    dirName_MASK=final_directory+'/'+str(viewmode_2)+'/'+str(i)+'/'
-    dirName_CROP=final_directory+'/'+str(viewmode_crop)+'/'+str(i)+'/'
-    dirName_TEXT_FILE=final_directory+'/'+str(Labels)+'/'+str(i)+'/'
+    dirName_RGB= final_directory+'/'+str(viewmode_1)+'/'+'00'+str(object_class)+'/'
+    dirName_MASK=final_directory+'/'+str(viewmode_2)+'/'+'00'+str(object_class)+'/'
+    dirName_CROP=final_directory+'/'+str(viewmode_crop)+'/'+'00'+str(object_class)+'/'
+    dirName_TEXT_FILE=final_directory+'/'+str(Labels)+'/'+'00'+str(object_class)+'/'
 
     if not os.path.exists(dirName_RGB and dirName_MASK and dirName_CROP and dirName_TEXT_FILE):
         pass
