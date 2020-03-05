@@ -19,11 +19,12 @@ Step by step the working method of the automated image capturing tool is describ
 * Before running the [main python file](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) it is obvious to turn on the PLAY moodin UE4
 * In [main.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) two functions are called, one for cropping the object from the RGB image using **the mask information** and another is for doing the annotation
 * After running the [main.py](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/master/capture_UE4_image/capture_image_UE4.py) for one actoar at a time RGB image, mask image, normal image, ROI(ina text file) and Mask Image information(1 text file for one actor) are saved.
- Two things to remind --
+ Things to remind --
  
  * [Here](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/d9c6e9af88067b8135d5ca100b13d9238dc6abba/capture_image_config_json/capture_image_UE4.py#L105) give the config file name that you want to use
 
 * In the config file all minimal info has given which will control how to take the image like polar, azimuthal angle, viewmode of UE4, image type etc. Pay attention [here](https://github.com/atifkarim/unreal_cv_image_manipulation/blob/d9c6e9af88067b8135d5ca100b13d9238dc6abba/capture_image_config_json/config_file_capture_image.json#L5), to give **minus**/**negative** sign before the step of polar angle.
+* In **json file** in the actor key write only those actor's name which are present in the game in playmode. To get the actors name from the **UE4 game** write in the **console of UE4 in plymode** -- `vget /objects`
 
 
 After performing the above task the output folder structure will be as follows --
